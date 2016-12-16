@@ -6,9 +6,49 @@ enum class Direction {
     NORTH, SOUTH, EAST, WEST
 }
 
-class Coordinate(var x: Int, var y: Int)
+class Coordinate(var x: Int = 0, var y: Int = 0)
 
 class Vector(var direction: Char, var magnitude: Int)
+
+class Person(val currentPosition: Coordinate = Coordinate(), var currentDirection: Direction = Direction.NORTH) {
+
+    fun move(vector: Vector) {
+        turn(vector)
+        walk(vector)
+    }
+
+    private fun turn(vector: Vector) {
+        when (vector.direction) {
+            'R' -> {
+                when (currentDirection) {
+                    Direction.NORTH -> currentDirection = Direction.EAST
+                    Direction.SOUTH -> currentDirection = Direction.WEST
+                    Direction.EAST -> currentDirection = Direction.SOUTH
+                    Direction.WEST -> currentDirection = Direction.NORTH
+                }
+            }
+            'L' -> {
+                when (currentDirection) {
+                    Direction.NORTH -> currentDirection = Direction.WEST
+                    Direction.SOUTH -> currentDirection = Direction.EAST
+                    Direction.EAST -> currentDirection = Direction.NORTH
+                    Direction.WEST -> currentDirection = Direction.SOUTH
+                }
+            }
+        }
+    }
+
+    private fun walk(vector: Vector) {
+        when (currentDirection) {
+            Direction.NORTH -> currentPosition.y += vector.magnitude
+            Direction.SOUTH -> currentPosition.y -= vector.magnitude
+            Direction.EAST -> currentPosition.x += vector.magnitude
+            Direction.WEST -> currentPosition.x -= vector.magnitude
+        }
+    }
+
+    fun distanceTravelled() = currentPosition.x.abs() + currentPosition.y.abs()
+}
 
 fun Int.abs(): Int {
     return if (this > 0) {
@@ -28,65 +68,14 @@ fun String.parseVector(): Vector {
 fun shortestPath(path: String): Int {
     val steps = path.split(", ")
 
-    val currentLocation = Coordinate(0, 0)
-    var currentDirection = Direction.NORTH
+    val person = Person()
 
     steps.forEach { step ->
         val vector = step.parseVector()
-
-        when (currentDirection) {
-            Direction.NORTH -> {
-                when (vector.direction) {
-                    'R' -> {
-                        currentDirection = Direction.EAST
-                        currentLocation.x += vector.magnitude
-                    }
-                    'L' -> {
-                        currentDirection = Direction.WEST
-                        currentLocation.x -= vector.magnitude
-                    }
-                }
-            }
-            Direction.SOUTH -> {
-                when (vector.direction) {
-                    'R' -> {
-                        currentDirection = Direction.WEST
-                        currentLocation.x -= vector.magnitude
-                    }
-                    'L' -> {
-                        currentDirection = Direction.EAST
-                        currentLocation.x += vector.magnitude
-                    }
-                }
-            }
-            Direction.EAST -> {
-                when (vector.direction) {
-                    'R' -> {
-                        currentDirection = Direction.SOUTH
-                        currentLocation.y -= vector.magnitude
-                    }
-                    'L' -> {
-                        currentDirection = Direction.NORTH
-                        currentLocation.y += vector.magnitude
-                    }
-                }
-            }
-            Direction.WEST -> {
-                when (vector.direction) {
-                    'R' -> {
-                        currentDirection = Direction.NORTH
-                        currentLocation.y += vector.magnitude
-                    }
-                    'L' -> {
-                        currentDirection = Direction.SOUTH
-                        currentLocation.y -= vector.magnitude
-                    }
-                }
-            }
-        }
+        person.move(vector)
     }
 
-    return currentLocation.x.abs() + currentLocation.y.abs()
+    return person.distanceTravelled()
 }
 
 fun main(args: Array<String>) {

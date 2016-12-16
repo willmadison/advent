@@ -6,7 +6,7 @@ enum class Direction {
     NORTH, SOUTH, EAST, WEST
 }
 
-class Coordinate(var x: Int = 0, var y: Int = 0)
+data class Coordinate(var x: Int = 0, var y: Int = 0)
 
 class Vector(var direction: Char, var magnitude: Int)
 

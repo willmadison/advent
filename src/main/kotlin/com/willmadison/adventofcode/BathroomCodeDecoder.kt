@@ -17,13 +17,12 @@ class Keypad {
 }
 
 fun Char.parseMovement(): Movement {
-    when (this) {
-        'U' -> return Movement.UP
-        'D' -> return Movement.DOWN
-        'L' -> return Movement.LEFT
-        'R' -> return Movement.RIGHT
-        else ->
-            return Movement.INVALID
+    return when (this) {
+        'U' -> Movement.UP
+        'D' -> Movement.DOWN
+        'L' -> Movement.LEFT
+        'R' -> Movement.RIGHT
+        else -> Movement.INVALID
     }
 }
 
@@ -36,24 +35,26 @@ fun decodeBathRoomInstructions(instructionBlock: String): Int {
 
     var fingerPosition = Coordinate(1, 1)
 
-    for (instruction in instructions) {
-        for (step in instruction.toCharArray()) {
-            var position: Coordinate
+    with (keypad) {
+        instructions.forEach { instruction ->
+            instruction.toCharArray().forEach { step ->
+                val position: Coordinate
 
-            when (step.parseMovement()) {
-                Movement.UP ->  position = fingerPosition.copy(fingerPosition.x - 1)
-                Movement.DOWN -> position = fingerPosition.copy(fingerPosition.x + 1)
-                Movement.LEFT -> position = fingerPosition.copy(y = fingerPosition.y - 1)
-                Movement.RIGHT -> position = fingerPosition.copy(y = fingerPosition.y + 1)
-                Movement.INVALID -> position = fingerPosition
+                when (step.parseMovement()) {
+                    Movement.UP ->  position = fingerPosition.copy(fingerPosition.x - 1)
+                    Movement.DOWN -> position = fingerPosition.copy(fingerPosition.x + 1)
+                    Movement.LEFT -> position = fingerPosition.copy(y = fingerPosition.y - 1)
+                    Movement.RIGHT -> position = fingerPosition.copy(y = fingerPosition.y + 1)
+                    Movement.INVALID -> position = fingerPosition
+                }
+
+                if (canPress(position)) {
+                    fingerPosition = position
+                }
             }
 
-            if (keypad.canPress(position)) {
-                fingerPosition = position
-            }
+            digits.add(press(fingerPosition))
         }
-
-        digits.add(keypad.press(fingerPosition))
     }
 
     return digits.joinToString("").toInt()

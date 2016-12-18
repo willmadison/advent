@@ -1615,7 +1615,7 @@ fun main(args: Array<String>) {
   188  509  421
   850  394  702
    68  744  665
-  919  923  873""")
+  919  923  873""".trimIndent())
 
     println("The number of possible triangles is $numPossibleTriangles.")
 }

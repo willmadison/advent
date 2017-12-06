@@ -12,10 +12,10 @@ func TestChecksum(t *testing.T) {
 		expected int
 	}{
 		{
-			`5 1 9 5
-7 5 3
-2 4 6 8`,
-			18,
+			`5 10 9 7
+7 6 3
+9 4 6 8`,
+			6,
 		},
 	}
 

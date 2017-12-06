@@ -14,36 +14,35 @@ func Checksum(spreadsheet string) int {
 	for scanner.Scan() {
 		row := scanner.Text()
 
-		min, max := determineMinMax(row)
+		divisor, dividend := determineDivisorDividend(row)
 
-		checksum += max - min
+		checksum += dividend / divisor
 	}
 
 	return checksum
 }
 
-func determineMinMax(row string) (int, int) {
-	var min, max int
+func determineDivisorDividend(row string) (int, int) {
+	var divisor, dividend, i, j int
 
-	numbers := strings.Fields(row)
+	var numbers []int
 
-	first, _ := strconv.Atoi(numbers[0])
+	for _, n := range strings.Fields(row) {
+		i, _ := strconv.Atoi(n)
+		numbers = append(numbers, i)
+	}
 
-	min, max = first, first
+	for i, divisor = range numbers {
+		for j, dividend = range numbers {
+			if i == j {
+				continue
+			}
 
-	numbers = numbers[1:]
-
-	for _, number := range numbers {
-		n, _ := strconv.Atoi(number)
-
-		if n < min {
-			min = n
-		}
-
-		if n > max {
-			max = n
+			if dividend % divisor == 0 {
+				return divisor, dividend
+			}
 		}
 	}
 
-	return min, max
+	return divisor, dividend
 }

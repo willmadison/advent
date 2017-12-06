@@ -1,15 +1,15 @@
 package advent2017
 
 func InverseCaptcha(captcha string) int {
+	offset := len(captcha) / 2
+
 	var sum int
 	runes := []rune(captcha)
-	previous := runes[len(runes)-1]
 
-	for _, digit := range runes {
-		if previous == digit {
+	for i, digit := range runes {
+		if  digit == runes[(i+offset)%len(runes)] {
 			sum += int(digit - '0')
 		}
-		previous = digit
 	}
 
 	return sum

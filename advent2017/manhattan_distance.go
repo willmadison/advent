@@ -64,7 +64,7 @@ func toCartesianCoordinate(cellNumber int) Point {
 	}
 
 	moves = 0
-	for current != cellNumber && moves < l-1 {
+	for current != cellNumber && moves < l-2 {
 		//Move down
 		point.y--
 		moves++

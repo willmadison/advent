@@ -2,6 +2,7 @@ package advent2017
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -36,26 +37,26 @@ func TestManhattanDistanceTo(t *testing.T) {
 
 func TestToCartesianCoordinate(t *testing.T) {
 	cases := []struct {
-		given int
+		given    int
 		expected Point
 	}{
 		{
-			given: 1,
+			given:    1,
 			expected: Point{0, 0},
 		}, {
-			given: 3,
+			given:    3,
 			expected: Point{1, 1},
-		},{
-			given: 13,
+		}, {
+			given:    13,
 			expected: Point{2, 2},
-		},{
-			given: 9,
+		}, {
+			given:    9,
 			expected: Point{1, -1},
-		},{
-			given: 25,
+		}, {
+			given:    25,
 			expected: Point{2, -2},
-		},{
-			given: 48,
+		}, {
+			given:    48,
 			expected: Point{2, -3},
 		},
 	}
@@ -64,4 +65,38 @@ func TestToCartesianCoordinate(t *testing.T) {
 		p := toCartesianCoordinate(c.given)
 		assert.Equal(t, c.expected, p)
 	}
+}
+
+func TestFirstCellLargerThan(t *testing.T) {
+	cases := []struct {
+		given    int
+		expected int
+	}{
+		{
+			1,
+			2,
+		},
+		{
+			9,
+			10,
+		},
+		{
+			60,
+			122,
+		},
+		{
+			50,
+			54,
+		},
+		{
+			600,
+			747,
+		},
+	}
+
+	for _, c := range cases {
+		actual := FirstCellLargerThan(c.given)
+		assert.Equal(t, c.expected, actual)
+	}
+
 }

@@ -1,20 +1,20 @@
 package advent2017
 
 import (
-	"bytes"
 	"strconv"
+	"strings"
 )
 
 type Memory []int
 
 func (m Memory) Serialize() string {
-	var buffer bytes.Buffer
+	var values []string
 
 	for _, i := range m {
-		buffer.WriteString(strconv.Itoa(i))
+		values = append(values, strconv.Itoa(i))
 	}
 
-	return buffer.String()
+	return strings.Join(values, "-")
 }
 
 func (m Memory) Redistribute() {
@@ -34,16 +34,34 @@ func (m Memory) Redistribute() {
 	currentIndex := maxAt + 1
 
 	for blocks > 0 {
-		if currentIndex > len(m) - 1 {
+		if currentIndex > len(m)-1 {
 			currentIndex = 0
 		}
 
-		m[currentIndex] += 1
+		m[currentIndex]++
 		blocks--
 		currentIndex++
 	}
 }
 
-func NumUniqueDistributions(memory Memory) int {
-	return 0
+func NumUniqueDistributions(memory Memory) (int, int) {
+	distributions := map[string]int{}
+
+	var redistributions int
+
+	var seen bool
+
+	for !seen {
+		memory.Redistribute()
+		redistributions++
+
+		key := memory.Serialize()
+		_, seen = distributions[key]
+
+		if !seen {
+			distributions[key] = redistributions
+		}
+	}
+
+	return redistributions, redistributions - distributions[memory.Serialize()]
 }

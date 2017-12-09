@@ -3,7 +3,6 @@ package advent2017
 import (
 	"bufio"
 	"io"
-	"sort"
 	"strconv"
 	"strings"
 	"fmt"
@@ -138,9 +137,6 @@ func FindRootOfCallTree(r io.Reader) Program {
 		}
 	}
 
-	fmt.Println("numParents:", len(parents))
-	fmt.Println("parents:", parents)
-
 	var root Program
 
 	for _, p := range parents {
@@ -153,31 +149,6 @@ func FindRootOfCallTree(r io.Reader) Program {
 		}
 	}
 
-	var programs []Program
-
-	for _, p := range programsByName {
-		programs = append(programs, p)
-	}
-
-	sort.Slice(programs, func(i, j int) bool {
-		return programs[i].Parent > programs[j].Parent
-	})
-
-	for _, p := range programs {
-		if len(p.Supporting) > 0 {
-			for s := range p.Supporting {
-				program := programsByName[s]
-				p.Subroutines = append(p.Subroutines, program)
-			}
-		}
-
-		if p.Parent != "" {
-			parent := programsByName[p.Parent]
-			parent.Subroutines = append(parent.Subroutines, p)
-			programsByName[p.Parent] = parent
-		}
-	}
-
 	for _, p := range parents {
 		program := programsByName[p]
 
@@ -186,7 +157,20 @@ func FindRootOfCallTree(r io.Reader) Program {
 		}
 	}
 
-	return root
+	return populateSubroutines(root, programsByName)
+}
+
+func populateSubroutines(root Program, programsByName map[string]Program) Program {
+	if len(root.Supporting) == 0 {
+		return root
+	} else {
+		for s := range root.Supporting {
+			program := programsByName[s]
+			root.Subroutines = append(root.Subroutines, populateSubroutines(program, programsByName))
+		}
+
+		return root
+	}
 }
 
 func FindImbalance(root Program) int {
@@ -199,18 +183,11 @@ func FindImbalance(root Program) int {
 		weights[weight] = struct{}{}
 	}
 
-	if len(weights) > 2 {
-		fmt.Println("weights:", weights)
-		panic("invalid state: should only have one subtree with improper weight")
-	}
-
 	var uniqueWeights []int
 
 	for weight := range weights {
 		uniqueWeights = append(uniqueWeights, weight)
 	}
-
-	fmt.Println("uniqueWeights:", uniqueWeights)
 
 	var commonWeight, outlierWeight int
 
@@ -218,14 +195,12 @@ func FindImbalance(root Program) int {
 
 	for weight, subtrees := range subtreesByWeight {
 		if len(subtrees) == 1 {
-			outlierWeight  = weight
+			outlierWeight = weight
 			outlier = subtrees[0]
 		} else if len(subtrees) > 1 {
 			commonWeight = weight
 		}
 	}
-
-	fmt.Println("outlier:", outlier, "outlierWeight:", outlierWeight, "commonWeight:", commonWeight)
 
 	return doFindImbalance(outlier, outlierWeight-commonWeight)
 }
@@ -259,7 +234,7 @@ func doFindImbalance(root Program, offset int) int {
 
 		for weight, subtrees := range subtreesByWeight {
 			if len(subtrees) == 1 {
-				outlierWeight  = weight
+				outlierWeight = weight
 				outlier = subtrees[0]
 			} else if len(subtrees) > 1 {
 				commonWeight = weight

@@ -5,10 +5,11 @@ import (
 	"strings"
 
 	"github.com/willmadison/advent/advent2017"
+	"os"
 )
 
 func main() {
-	fmt.Println(advent2017.FindRootOfCallTree(strings.NewReader(`uwzmqi (57)
+	root := advent2017.FindRootOfCallTree(strings.NewReader(`uwzmqi (57)
 emlzcpy (106) -> pwmoihf, sdwnkb
 oevnzwt (90)
 imjhra (23)
@@ -1496,6 +1497,13 @@ ndebha (76)
 ulzcu (17)
 tlmnwl (474) -> nidvi, alpas, urexzjf, ftolbk, efulo
 thwgxk (50)
-soxzrwm (83)`)))
+soxzrwm (83)`))
 
+	fmt.Printf("%+v\n", root)
+	fmt.Println("numSubRoutines (root):", len(root.Subroutines))
+
+	root.Traverse(func(p advent2017.Program) {
+		fmt.Fprintf(os.Stdout, "%s\n", p)
+	})
+	fmt.Println(advent2017.FindImbalance(root))
 }

@@ -2,11 +2,12 @@ package advent2017
 
 import (
 	"bufio"
-	"fmt"
 	"io"
 	"sort"
 	"strconv"
 	"strings"
+	"fmt"
+	"errors"
 )
 
 type Program struct {
@@ -25,6 +26,73 @@ func (p Program) TotalWeight() int {
 	}
 
 	return p.Weight + subRoutineWeight
+}
+
+func (p Program) String() string {
+	return fmt.Sprintf("%s (%d) [Parent: %s]", p.Name, p.Weight, p.Parent)
+}
+
+type Queue interface {
+	Enqueue(Program)
+	Dequeue() (Program, error)
+	Peek() (Program, error)
+}
+
+type programQueue struct {
+	data []Program
+	size int
+}
+
+func NewProgramQueue() Queue {
+	return &programQueue{data: []Program{}}
+}
+
+func (p *programQueue) Enqueue(value Program) {
+	p.data = append(p.data, value)
+	p.size += 1
+}
+
+func (p *programQueue) Dequeue() (Program, error) {
+	if p.size > 0 {
+		value := p.data[0]
+		p.size -= 1
+		p.data = p.data[1:]
+
+		return value, nil
+	}
+
+	return Program{}, errors.New("no such element")
+}
+
+func (p *programQueue) Peek() (Program, error) {
+	if p.size > 0 {
+		value := p.data[0]
+		return value, nil
+	}
+
+	return Program{}, errors.New("no such element")
+}
+
+func (p Program) Traverse(visit func(Program)) {
+	queue := NewProgramQueue()
+
+	queue.Enqueue(p)
+
+	var current Program
+	var err error
+
+	for err == nil {
+		current, err = queue.Dequeue()
+		if err != nil {
+			break
+		}
+
+		visit(current)
+
+		for _, s := range current.Subroutines {
+			queue.Enqueue(s)
+		}
+	}
 }
 
 func ParseProgramTowerDataPoint(data string) Program {
@@ -69,6 +137,9 @@ func FindRootOfCallTree(r io.Reader) Program {
 			parents = append(parents, p.Name)
 		}
 	}
+
+	fmt.Println("numParents:", len(parents))
+	fmt.Println("parents:", parents)
 
 	var root Program
 
@@ -119,15 +190,82 @@ func FindRootOfCallTree(r io.Reader) Program {
 }
 
 func FindImbalance(root Program) int {
-	fmt.Println("root:", root)
-
-	weightsBySubtree := map[string]int{}
+	subtreesByWeight := map[int][]Program{}
+	weights := map[int]struct{}{}
 
 	for _, t := range root.Subroutines {
-		weightsBySubtree[t.Name] = t.TotalWeight()
+		weight := t.TotalWeight()
+		subtreesByWeight[weight] = append(subtreesByWeight[weight], t)
+		weights[weight] = struct{}{}
 	}
 
-	fmt.Println("weightsBySubtree:", weightsBySubtree)
+	if len(weights) > 2 {
+		fmt.Println("weights:", weights)
+		panic("invalid state: should only have one subtree with improper weight")
+	}
 
-	return 0
+	var uniqueWeights []int
+
+	for weight := range weights {
+		uniqueWeights = append(uniqueWeights, weight)
+	}
+
+	fmt.Println("uniqueWeights:", uniqueWeights)
+
+	var commonWeight, outlierWeight int
+
+	var outlier Program
+
+	for weight, subtrees := range subtreesByWeight {
+		if len(subtrees) == 1 {
+			outlierWeight  = weight
+			outlier = subtrees[0]
+		} else if len(subtrees) > 1 {
+			commonWeight = weight
+		}
+	}
+
+	fmt.Println("outlier:", outlier, "outlierWeight:", outlierWeight, "commonWeight:", commonWeight)
+
+	return doFindImbalance(outlier, outlierWeight-commonWeight)
+}
+
+func doFindImbalance(root Program, offset int) int {
+	subtreesByWeight := map[int][]Program{}
+	weights := map[int]struct{}{}
+
+	for _, t := range root.Subroutines {
+		weight := t.TotalWeight()
+		subtreesByWeight[weight] = append(subtreesByWeight[weight], t)
+		weights[weight] = struct{}{}
+	}
+
+	var uniqueWeights []int
+
+	for weight := range weights {
+		uniqueWeights = append(uniqueWeights, weight)
+	}
+
+	if len(uniqueWeights) == 1 {
+		if offset > 0 {
+			return root.Weight - offset
+		} else {
+			return root.Weight + offset
+		}
+	} else {
+		var commonWeight, outlierWeight int
+
+		var outlier Program
+
+		for weight, subtrees := range subtreesByWeight {
+			if len(subtrees) == 1 {
+				outlierWeight  = weight
+				outlier = subtrees[0]
+			} else if len(subtrees) > 1 {
+				commonWeight = weight
+			}
+		}
+
+		return doFindImbalance(outlier, outlierWeight-commonWeight)
+	}
 }

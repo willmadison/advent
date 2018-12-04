@@ -1,10 +1,11 @@
 package advent2018
 
 import (
-	"github.com/stretchr/testify/assert"
 	"io"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestCalibrate(t *testing.T) {

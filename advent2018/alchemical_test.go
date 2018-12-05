@@ -35,6 +35,12 @@ func TestReduction(t *testing.T) {
 	}
 }
 
+func BenchmarkReduction(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		advent2018.Reduce("dabAcCaCBAcCcaDA")
+	}
+}
+
 func TestOptimalReduction(t *testing.T) {
 	cases := []struct {
 		given    string

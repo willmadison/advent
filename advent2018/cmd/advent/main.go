@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("https://adventofcode.com/2018/day/%s/input", os.Getenv("DAY")), nil)
+	req, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("https://adventofcode.com/%d/day/%s/input", time.Now().Year(), os.Getenv("DAY")), nil)
 
 	session := &http.Cookie{
 		Name:   "session",

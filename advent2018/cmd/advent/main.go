@@ -1,9 +1,7 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
@@ -34,12 +32,8 @@ func main() {
 
 	defer response.Body.Close()
 
-	content, _ := ioutil.ReadAll(response.Body)
-
 	start = time.Now()
-	reduced := advent2018.OptimalReduction(string(bytes.TrimSpace(content)))
-	fmt.Println("reduction completed in", time.Since(start))
-
-	fmt.Println(reduced)
-	fmt.Println(len(reduced))
+	a := advent2018.FindRegionAreaMinimizedByConstraint(response.Body, 10000)
+	fmt.Println("area =", a)
+	fmt.Println("area found in", time.Since(start))
 }

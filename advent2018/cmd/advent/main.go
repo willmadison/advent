@@ -33,7 +33,6 @@ func main() {
 	defer response.Body.Close()
 
 	start = time.Now()
-	a := advent2018.FindRegionAreaMinimizedByConstraint(response.Body, 10000)
-	fmt.Println("area =", a)
-	fmt.Println("area found in", time.Since(start))
+	order := advent2018.DetermineStepOrder(response.Body)
+	fmt.Println("order =", order)
 }

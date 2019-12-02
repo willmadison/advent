@@ -17,7 +17,15 @@ func main() {
 
 	defer input.Close()
 
-	totalFuel := advent2019.DeriveTotalFuelRequirementIncludingFuelMass(input)
+	//	finalProgram := advent2019.RunIntCodeMachine(input, advent2019.Modifier(func(values []int) []int {
+	//		values[1] = 12
+	//		values[2] = 2
+	//		return values
+	//	}))
+	//
+	//	fmt.Println("program[0] =", finalProgram[0])
 
-	fmt.Println("total fuel need (including fuel mass)=", totalFuel)
+	noun, verb := advent2019.ReverseEngineerIntCodeMachine(input, 19690720)
+
+	fmt.Println("100*noun + verb =", 100*noun+verb)
 }

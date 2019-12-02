@@ -7,6 +7,7 @@ import (
 	"io"
 	"regexp"
 	"sort"
+	"time"
 )
 
 type step string
@@ -49,14 +50,7 @@ func DetermineStepOrder(instructions io.Reader) string {
 		stepHierarchy[precedingStep] = append(stepHierarchy[precedingStep], step)
 	}
 
-	root, _ := findRoot(stepHierarchy)
-
-	fmt.Println("root=", root)
-	alphas := []string{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"}
-
-	for _, l := range alphas {
-		fmt.Println("stepHierarchy[", l, "] =", stepHierarchy[step(l)])
-	}
+	roots, numSteps := findRoots(stepHierarchy)
 
 	visibleSteps := []step{}
 	completedSteps := map[step]struct{}{}
@@ -64,10 +58,18 @@ func DetermineStepOrder(instructions io.Reader) string {
 
 	var buf bytes.Buffer
 
+	sort.Slice(roots, func(i, j int) bool {
+		return roots[i] < roots[j]
+	})
+
+	root := roots[0]
+
 	buf.WriteString(string(root))
 	completedSteps[root] = struct{}{}
 
 	nextSteps := stepHierarchy[root]
+	nextSteps = append(nextSteps, roots[1:]...)
+
 	sort.Slice(nextSteps, func(i, j int) bool {
 		return nextSteps[i] < nextSteps[j]
 	})
@@ -77,41 +79,152 @@ func DetermineStepOrder(instructions io.Reader) string {
 		visible[s] = struct{}{}
 	}
 
-	fmt.Println("visibleSteps=", visibleSteps)
+	var nextStep step
 
-	//var nextStep step
+	for len(completedSteps) < numSteps {
+		nextStep = visibleSteps[0]
+		visibleSteps = visibleSteps[1:]
 
-	//	for len(completedSteps) < numSteps {
-	//		nextStep = visibleSteps[0]
-	//
-	//		fmt.Println("nextStep =", nextStep)
-	//
-	//		visibleSteps = visibleSteps[1:]
-	//		fmt.Println("visibleSteps=", visibleSteps)
-	//
-	//		prerequisites := nextStep.findPrerequisites(stepHierarchy)
-	//
-	//		if nextStep.isCompleteable(completedSteps, prerequisites) {
-	//			buf.WriteString(nextStep.name)
-	//			completedSteps[nextStep] = struct{}{}
-	//
-	//			upcomingSteps := stepHierarchy[nextStep]
-	//
-	//			for _, s := range upcomingSteps {
-	//				if _, present := visible[s]; !present {
-	//					visibleSteps = append(visibleSteps, s)
-	//				}
-	//			}
-	//
-	//			sort.Slice(visibleSteps, func(i, j int) bool {
-	//				return visibleSteps[i].name < visibleSteps[j].name
-	//			})
-	//		} else {
-	//			visibleSteps = append(visibleSteps, nextStep)
-	//		}
-	//	}
+		prerequisites := nextStep.findPrerequisites(stepHierarchy)
+
+		if nextStep.isCompleteable(completedSteps, prerequisites) {
+			buf.WriteString(string(nextStep))
+			completedSteps[nextStep] = struct{}{}
+
+			upcomingSteps := stepHierarchy[nextStep]
+
+			for _, s := range upcomingSteps {
+				if _, present := visible[s]; !present {
+					visibleSteps = append(visibleSteps, s)
+					visible[s] = struct{}{}
+				}
+			}
+
+			sort.Slice(visibleSteps, func(i, j int) bool {
+				return visibleSteps[i] < visibleSteps[j]
+			})
+		} else {
+			visibleSteps = append(visibleSteps, nextStep)
+		}
+	}
 
 	return buf.String()
+}
+
+type job struct {
+	step          step
+	prerequisites []step
+}
+
+type completion struct {
+	step        step
+	timeElapsed int
+}
+
+func DetermineInstructionSLA(instructions io.Reader, numHelpers, stepCompletionOverhead int) int {
+	workers := numHelpers + 1
+
+	var timeElapsed int
+
+	jobs := make(chan job)
+	completions := make(chan completion)
+
+	quit := make(chan struct{})
+
+	for i := 0; i < workers; i++ {
+		go work(jobs, completions, stepCompletionOverhead, quit)
+	}
+
+	stepHierarchy := map[step][]step{}
+
+	scanner := bufio.NewScanner(instructions)
+
+	for scanner.Scan() {
+		step, precedingStep := parseStep(scanner.Text())
+		stepHierarchy[precedingStep] = append(stepHierarchy[precedingStep], step)
+	}
+
+	roots, numSteps := findRoots(stepHierarchy)
+
+	visibleSteps := []step{}
+	completedSteps := map[step]struct{}{}
+	visible := map[step]struct{}{}
+
+	sort.Slice(roots, func(i, j int) bool {
+		return roots[i] < roots[j]
+	})
+
+	visibleSteps = append(visibleSteps, roots...)
+	for _, s := range visibleSteps {
+		visible[s] = struct{}{}
+	}
+
+	go func() {
+		for {
+			select {
+			case completion := <-completions:
+				fmt.Printf("completing %v\n", completion)
+				completedSteps[completion.step] = struct{}{}
+				upcomingSteps := stepHierarchy[completion.step]
+
+				for _, s := range upcomingSteps {
+					if _, present := visible[s]; !present {
+						visibleSteps = append(visibleSteps, s)
+						visible[s] = struct{}{}
+					}
+				}
+
+				sort.Slice(visibleSteps, func(i, j int) bool {
+					return visibleSteps[i] < visibleSteps[j]
+				})
+			case <-quit:
+				return
+			}
+		}
+	}()
+
+	for len(completedSteps) < numSteps {
+		if len(visibleSteps) == 0 {
+			fmt.Println("waiting for visible steps...")
+			time.Sleep(2 * time.Millisecond)
+			continue
+		}
+
+		nextStep := visibleSteps[0]
+		visibleSteps = visibleSteps[1:]
+
+		prerequisites := nextStep.findPrerequisites(stepHierarchy)
+
+		if nextStep.isCompleteable(completedSteps, prerequisites) {
+			job := job{nextStep, prerequisites}
+			fmt.Printf("sending job: %v\n", job)
+			jobs <- job
+			fmt.Printf("sent job: %v\n", job)
+		} else {
+			visibleSteps = append(visibleSteps, nextStep)
+		}
+	}
+
+	close(quit)
+
+	return timeElapsed
+}
+
+func work(jobs <-chan job, completions chan<- completion, overhead int, quit <-chan struct{}) {
+	for {
+		select {
+		case job := <-jobs:
+			fmt.Printf("receiving job: %v\n", job)
+			timeElapsed := int(string(job.step)[0] - 'A' + 1)
+			workTime := time.Duration(timeElapsed) * time.Millisecond
+			time.Sleep(workTime)
+			completion := completion{job.step, timeElapsed + overhead}
+			completions <- completion
+			fmt.Printf("completed job: %v in %v\n", job, workTime)
+		case <-quit:
+			return
+		}
+	}
 }
 
 var stepRegEx = regexp.MustCompile(`^Step ([A-Z]) must be finished before step ([A-Z]) can begin\.$`)
@@ -121,7 +234,7 @@ func parseStep(rawStep string) (step, step) {
 	return step(matches[2]), step(matches[1])
 }
 
-func findRoot(tree map[step][]step) (step, int) {
+func findRoots(tree map[step][]step) ([]step, int) {
 	seen := map[step]struct{}{}
 
 	for _, children := range tree {
@@ -130,14 +243,13 @@ func findRoot(tree map[step][]step) (step, int) {
 		}
 	}
 
-	var root step
+	var roots []step
 
 	for step := range tree {
 		if _, present := seen[step]; !present {
-			root = step
-			break
+			roots = append(roots, step)
 		}
 	}
 
-	return root, len(seen) + 1
+	return roots, len(seen) + len(roots)
 }

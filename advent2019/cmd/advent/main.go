@@ -17,15 +17,8 @@ func main() {
 
 	defer input.Close()
 
-	//	finalProgram := advent2019.RunIntCodeMachine(input, advent2019.Modifier(func(values []int) []int {
-	//		values[1] = 12
-	//		values[2] = 2
-	//		return values
-	//	}))
-	//
-	//	fmt.Println("program[0] =", finalProgram[0])
+	var origin advent.Point
+	nearest := advent2019.FindNearestIntersection(input)
 
-	noun, verb := advent2019.ReverseEngineerIntCodeMachine(input, 19690720)
-
-	fmt.Println("100*noun + verb =", 100*noun+verb)
+	fmt.Println("distance of nearest intersection =", origin.ManhattanDistance(nearest))
 }

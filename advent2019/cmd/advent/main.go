@@ -17,8 +17,10 @@ func main() {
 
 	defer input.Close()
 
-	var origin advent.Point
-	nearest := advent2019.FindNearestIntersection(input)
+	// var origin advent.Point
+	// nearest := advent2019.FindNearestIntersection(input)
 
-	fmt.Println("distance of nearest intersection =", origin.ManhattanDistance(nearest))
+	//fmt.Println("distance of nearest intersection =", origin.ManhattanDistance(nearest))
+
+	fmt.Println("Sum of shortest paths:", advent2019.FindMinimalTotalSteps(input))
 }

@@ -12,29 +12,20 @@ import (
 )
 
 type path struct {
-	uniqueSteps map[advent.Point]struct{}
-	steps       []advent.Point
+	stepCountsByPoint map[advent.Point]int
+	steps             []advent.Point
 }
 
 func (p path) stepsTo(point advent.Point) int {
-	var steps int
-
-	for _, step := range p.steps {
-		steps++
-
-		if step == point {
-			break
-		}
-	}
-
-	return steps
+	return p.stepCountsByPoint[point]
 }
 
 func (p path) intersect(other path) []advent.Point {
 	var intersection []advent.Point
+	var origin advent.Point
 
-	for point, _ := range other.uniqueSteps {
-		if _, present := p.uniqueSteps[point]; present {
+	for point, _ := range other.stepCountsByPoint {
+		if _, present := p.stepCountsByPoint[point]; present && point != origin {
 			intersection = append(intersection, point)
 		}
 	}
@@ -56,6 +47,7 @@ func FindNearestIntersection(input io.Reader) advent.Point {
 
 func FindMinimalTotalSteps(input io.Reader) int {
 	firstPath, secondPath := derivePaths(input)
+
 	intersections := firstPath.intersect(secondPath)
 
 	minSteps := math.MaxInt32
@@ -113,10 +105,8 @@ func toVector(s string) vector {
 func derivePath(rawPath string) path {
 	movements := strings.Split(rawPath, ",")
 
-	var steps []advent.Point
-	p := map[advent.Point]struct{}{}
-
-	var origin advent.Point
+	steps := []advent.Point{}
+	p := map[advent.Point]int{}
 
 	var currentLocation advent.Point
 
@@ -127,49 +117,39 @@ func derivePath(rawPath string) path {
 		case north:
 			for y := currentLocation.Y; y < currentLocation.Y+movement.magnitude; y++ {
 				point := advent.Point{X: currentLocation.X, Y: y}
-
-				if point != origin {
-					p[point] = struct{}{}
-					steps = append(steps, point)
-				}
+				steps = append(steps, point)
 			}
 
 			currentLocation.Y += movement.magnitude
 		case east:
 			for x := currentLocation.X; x < currentLocation.X+movement.magnitude; x++ {
 				point := advent.Point{X: x, Y: currentLocation.Y}
-
-				if point != origin {
-					p[point] = struct{}{}
-					steps = append(steps, point)
-				}
+				steps = append(steps, point)
 			}
 
 			currentLocation.X += movement.magnitude
 		case south:
-			for y := currentLocation.Y - movement.magnitude; y < currentLocation.Y; y++ {
+			for y := currentLocation.Y; y > currentLocation.Y-movement.magnitude; y-- {
 				point := advent.Point{X: currentLocation.X, Y: y}
-
-				if point != origin {
-					p[point] = struct{}{}
-					steps = append(steps, point)
-				}
+				steps = append(steps, point)
 			}
 
 			currentLocation.Y -= movement.magnitude
 		case west:
-			for x := currentLocation.X - movement.magnitude; x < currentLocation.X; x++ {
+			for x := currentLocation.X; x > currentLocation.X-movement.magnitude; x-- {
 				point := advent.Point{X: x, Y: currentLocation.Y}
-
-				if point != origin {
-					p[point] = struct{}{}
-					steps = append(steps, point)
-				}
+				steps = append(steps, point)
 			}
 
 			currentLocation.X -= movement.magnitude
 		}
 	}
 
-	return path{uniqueSteps: p, steps: steps}
+	for count, step := range steps {
+		if _, present := p[step]; !present {
+			p[step] = count
+		}
+	}
+
+	return path{stepCountsByPoint: p, steps: steps}
 }

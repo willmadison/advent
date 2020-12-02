@@ -19,5 +19,5 @@ func main() {
 
 	defer response.Close()
 
-	fmt.Println(advent2020.RepairReportTriplet(response))
+	fmt.Println(advent2020.CountValidPasswordsUpdatedPolicy(response))
 }

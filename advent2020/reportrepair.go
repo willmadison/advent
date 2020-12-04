@@ -36,9 +36,7 @@ func RepairReportTriplet(r io.Reader) int {
 
 	for scanner.Scan() {
 		rawExpense := scanner.Text()
-
 		expense, _ := strconv.Atoi(rawExpense)
-
 		expenses[expense] = struct{}{}
 	}
 

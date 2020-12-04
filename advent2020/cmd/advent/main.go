@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
+	"github.com/willmadison/advent/internal/location"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -19,5 +20,31 @@ func main() {
 
 	defer response.Close()
 
-	fmt.Println(advent2020.CountValidPasswordsUpdatedPolicy(response))
+	tm := advent2020.NewTrajectoryMap(response)
+	slope := location.Slope{1, 3}
+
+	fmt.Println(advent2020.CountEncounteredTrees(tm, slope))
+
+	slopes := []location.Slope{
+		{1, 1},
+		{1, 3},
+		{1, 5},
+		{1, 7},
+		{2, 1},
+	}
+
+	treesEncountered := []int{}
+
+	for _, slope := range slopes {
+		trees := advent2020.CountEncounteredTrees(tm, slope)
+		treesEncountered = append(treesEncountered, trees)
+	}
+
+	product := 1
+
+	for _, numTrees := range treesEncountered {
+		product *= numTrees
+	}
+
+	fmt.Println(product)
 }

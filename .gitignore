@@ -16,3 +16,4 @@ build
 .idea
 advent2017/cmd/advent/advent
 advent2018/cmd/advent/advent
+advent2020/cmd/advent/advent

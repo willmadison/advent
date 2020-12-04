@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
-	"github.com/willmadison/advent/internal/location"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -20,31 +19,15 @@ func main() {
 
 	defer response.Close()
 
-	tm := advent2020.NewTrajectoryMap(response)
-	slope := location.Slope{1, 3}
+	passports := advent2020.ParsePassports(response)
 
-	fmt.Println(advent2020.CountEncounteredTrees(tm, slope))
+	var validPassports int
 
-	slopes := []location.Slope{
-		{1, 1},
-		{1, 3},
-		{1, 5},
-		{1, 7},
-		{2, 1},
+	for _, p := range passports {
+		if p.IsValid() {
+			validPassports++
+		}
 	}
 
-	treesEncountered := []int{}
-
-	for _, slope := range slopes {
-		trees := advent2020.CountEncounteredTrees(tm, slope)
-		treesEncountered = append(treesEncountered, trees)
-	}
-
-	product := 1
-
-	for _, numTrees := range treesEncountered {
-		product *= numTrees
-	}
-
-	fmt.Println(product)
+	fmt.Println(validPassports)
 }

@@ -19,15 +19,5 @@ func main() {
 
 	defer response.Close()
 
-	passports := advent2020.ParsePassports(response)
-
-	var validPassports int
-
-	for _, p := range passports {
-		if p.IsValid() {
-			validPassports++
-		}
-	}
-
-	fmt.Println(validPassports)
+	fmt.Println(advent2020.FindMissingSeatID(response))
 }

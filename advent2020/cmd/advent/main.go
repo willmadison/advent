@@ -19,6 +19,6 @@ func main() {
 
 	defer response.Close()
 
-	groups := advent2020.ParseGroups(response)
-	fmt.Println(advent2020.CountAffirmatives(groups))
+	rules := advent2020.ParseBagRules(response)
+	fmt.Println(rules.TotalDescendantsOf("shiny gold"))
 }

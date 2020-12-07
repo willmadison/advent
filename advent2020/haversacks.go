@@ -67,11 +67,11 @@ func (b BagRules) FindAncestorsOf(bag string) []string {
 	for q.Size() > 0 {
 		c, _ := q.Dequeue()
 
-		if _, seen := visited[c]; !seen {
-			visited[c] = struct{}{}
-		} else {
+		if _, seen := visited[c]; seen {
 			continue
 		}
+
+		visited[c] = struct{}{}
 
 		for bag, descendants := range b {
 			if _, present := descendants[c]; present {

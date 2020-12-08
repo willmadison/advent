@@ -19,6 +19,7 @@ func main() {
 
 	defer response.Close()
 
-	rules := advent2020.ParseBagRules(response)
-	fmt.Println(rules.TotalDescendantsOf("shiny gold"))
+	program := advent2020.ParseProgram(response)
+	patched := advent2020.PatchProgram(program)
+	fmt.Println(advent2020.Run(patched))
 }

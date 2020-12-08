@@ -10,18 +10,18 @@ import (
 type Operation string
 
 const (
-	NoOp Operation = "nop"
+	NoOp       Operation = "nop"
 	Accumulate Operation = "acc"
-	Jump Operation = "jmp"
+	Jump       Operation = "jmp"
 )
 
 type Command struct {
-	op Operation
+	op       Operation
 	argument int
 }
 
 func toCommand(instruction string) Command {
-	instructionParts := strings.Split(instruction," ")
+	instructionParts := strings.Split(instruction, " ")
 	argument, _ := strconv.Atoi(instructionParts[1])
 	return Command{Operation(instructionParts[0]), argument}
 }

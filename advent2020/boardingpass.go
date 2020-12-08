@@ -15,12 +15,12 @@ func FindSeatLocation(boardingPass string) (int, int) {
 	rowLocator := boardingPass[0:7]
 
 	for _, c := range rowLocator {
-		midpoint := (rowMin+rowMax)/2
+		midpoint := (rowMin + rowMax) / 2
 		switch rune(c) {
 		case 'F':
 			rowMax = midpoint
 		default:
-			rowMin = midpoint+1
+			rowMin = midpoint + 1
 		}
 	}
 
@@ -32,12 +32,12 @@ func FindSeatLocation(boardingPass string) (int, int) {
 	columnLocator := boardingPass[7:]
 
 	for _, c := range columnLocator {
-		midpoint := (columnMin+columnMax)/2
+		midpoint := (columnMin + columnMax) / 2
 		switch rune(c) {
 		case 'L':
 			columnMax = midpoint
 		default:
-			columnMin = midpoint+1
+			columnMin = midpoint + 1
 		}
 	}
 
@@ -68,7 +68,7 @@ func FindMissingSeatID(r io.Reader) int {
 	sort.Ints(allSeatIDs)
 
 	for i := 0; i < len(allSeatIDs)-1; i++ {
-		nextSeatId := allSeatIDs[i]+1
+		nextSeatId := allSeatIDs[i] + 1
 		if allSeatIDs[i+1] != nextSeatId {
 			missingSeatID = nextSeatId
 			break
@@ -86,7 +86,7 @@ func findAllSeatIDs(r io.Reader) []int {
 	for scanner.Scan() {
 		boardingPass := scanner.Text()
 		row, col := FindSeatLocation(boardingPass)
-		seatID := row*8+col
+		seatID := row*8 + col
 
 		seatIDs = append(seatIDs, seatID)
 	}

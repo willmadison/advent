@@ -19,7 +19,7 @@ func main() {
 
 	defer response.Close()
 
-	program := advent2020.ParseProgram(response)
-	patched := advent2020.PatchProgram(program)
-	fmt.Println(advent2020.Run(patched))
+	encodingError, values := advent2020.FindFirstEncodingError(response, 25, 25)
+	min, max := advent2020.FindEncryptionWeakness(values, encodingError)
+	fmt.Println(min+max)
 }

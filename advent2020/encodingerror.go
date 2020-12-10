@@ -13,7 +13,7 @@ func FindFirstEncodingError(r io.Reader, preambleLength, lookbackLength int) (in
 	i := preambleLength
 
 	for i < len(values) {
-		previous := values[i-lookbackLength:i]
+		previous := values[i-lookbackLength : i]
 		value := values[i]
 
 		if !hasTwoSum(value, previous) {
@@ -47,7 +47,7 @@ func hasTwoSum(value int, values []int) bool {
 	}
 
 	for _, v := range values {
-		otherAddend := value-v
+		otherAddend := value - v
 		if _, present := uniqueValues[otherAddend]; present && otherAddend != v {
 			return true
 		}
@@ -79,7 +79,7 @@ func findSublistSum(values []int, target int) []int {
 		}
 
 		if sum == target {
-			end = current-1
+			end = current - 1
 			break
 		}
 
@@ -102,7 +102,7 @@ func min(values []int) int {
 }
 
 func max(values []int) int {
-    maximum := math.MinInt64
+	maximum := math.MinInt64
 
 	for _, v := range values {
 		if v > maximum {

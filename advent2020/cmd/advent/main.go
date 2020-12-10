@@ -19,7 +19,5 @@ func main() {
 
 	defer response.Close()
 
-	encodingError, values := advent2020.FindFirstEncodingError(response, 25, 25)
-	min, max := advent2020.FindEncryptionWeakness(values, encodingError)
-	fmt.Println(min+max)
+	fmt.Println(advent2020.CountDistinctPossibleArrangements(response))
 }

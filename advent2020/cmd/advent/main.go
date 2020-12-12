@@ -19,5 +19,13 @@ func main() {
 
 	defer response.Close()
 
-	fmt.Println(advent2020.CountDistinctPossibleArrangements(response))
+	var lastSeatingArrangement advent2020.SeatingArrangement
+
+	seatingArrangement := advent2020.ParseSeatingArrangement(response)
+
+	for !lastSeatingArrangement.Equals(seatingArrangement) {
+		seatingArrangement, lastSeatingArrangement = seatingArrangement.RunSeatingCycle(5, advent2020.FirstVisible), seatingArrangement
+	}
+
+	fmt.Println(len(seatingArrangement.SeatsByState(advent2020.Occupied)))
 }

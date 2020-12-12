@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
+	"github.com/willmadison/advent/internal/location"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -19,13 +20,11 @@ func main() {
 
 	defer response.Close()
 
-	var lastSeatingArrangement advent2020.SeatingArrangement
+	var ship advent2020.Ship
+	instructions := advent2020.ParseNavigationInstructions(response)
+	ship.NavigateByWaypoint(instructions)
 
-	seatingArrangement := advent2020.ParseSeatingArrangement(response)
+	var origin location.Point
 
-	for !lastSeatingArrangement.Equals(seatingArrangement) {
-		seatingArrangement, lastSeatingArrangement = seatingArrangement.RunSeatingCycle(5, advent2020.FirstVisible), seatingArrangement
-	}
-
-	fmt.Println(len(seatingArrangement.SeatsByState(advent2020.Occupied)))
+	fmt.Println(origin.ManhattanDistance(ship.Location))
 }

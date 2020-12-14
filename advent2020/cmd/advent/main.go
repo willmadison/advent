@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
-	"github.com/willmadison/advent/internal/location"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -20,11 +19,18 @@ func main() {
 
 	defer response.Close()
 
-	var ship advent2020.Ship
-	instructions := advent2020.ParseNavigationInstructions(response)
-	ship.NavigateByWaypoint(instructions)
+	program := advent2020.ParseInitializationProgram(response)
 
-	var origin location.Point
+	var c advent2020.Computer
+	c.Version = advent2020.Version2
 
-	fmt.Println(origin.ManhattanDistance(ship.Location))
+	program.Run(&c)
+
+	var memoryTotal int
+
+	for _, v := range c.Memory {
+		memoryTotal += v
+	}
+
+	fmt.Println(memoryTotal)
 }

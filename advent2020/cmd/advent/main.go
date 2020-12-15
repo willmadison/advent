@@ -19,18 +19,5 @@ func main() {
 
 	defer response.Close()
 
-	program := advent2020.ParseInitializationProgram(response)
-
-	var c advent2020.Computer
-	c.Version = advent2020.Version2
-
-	program.Run(&c)
-
-	var memoryTotal int
-
-	for _, v := range c.Memory {
-		memoryTotal += v
-	}
-
-	fmt.Println(memoryTotal)
+	fmt.Println(advent2020.FindNthSpokenNumber(response, 30000000))
 }

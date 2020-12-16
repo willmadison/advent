@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
@@ -19,5 +20,28 @@ func main() {
 
 	defer response.Close()
 
-	fmt.Println(advent2020.FindNthSpokenNumber(response, 30000000))
+	rules, tickets := advent2020.ParseTicketRules(response)
+	errorRate, validTickets := rules.FindErrorScanRate(tickets[1:])
+	fmt.Println(errorRate)
+
+	fieldLocale := rules.DetermineFieldLocale(validTickets)
+	fmt.Println("Locale:", fieldLocale)
+
+	var departureFields []int
+
+	for field, index := range fieldLocale {
+		if strings.HasPrefix(field, "departure") {
+			departureFields = append(departureFields, index)
+		}
+	}
+
+	departureProduct := 1
+
+	myTicket := tickets[0]
+
+	for _, f := range departureFields {
+		departureProduct *= myTicket[f]
+	}
+
+	fmt.Println(departureProduct)
 }

@@ -154,6 +154,10 @@ func ParseExpressions(r io.Reader) []Expression {
 }
 
 func ParseExpression(s string) Expression {
+	return postfix(extractTokens(s))
+}
+
+func extractTokens(s string) []Token {
 	var allTokens []Token
 
 	var buf bytes.Buffer
@@ -194,10 +198,14 @@ func ParseExpression(s string) Expression {
 		buf.Reset()
 	}
 
+	return allTokens
+}
+
+func postfix(tokens []Token) []Token {
 	output := NewTokenQueue()
 	operators := NewTokenStack()
 
-	for _, token := range allTokens {
+	for _, token := range tokens {
 		switch t := token.(type) {
 		case Operator:
 			top, err := operators.Peek()
@@ -247,14 +255,14 @@ func ParseExpression(s string) Expression {
 		}
 	}
 
-	var tokens []Token
+	var postfixed []Token
 
 	for output.Size() > 0 {
 		t, _ := output.Dequeue()
-		tokens = append(tokens, t)
+		postfixed = append(postfixed, t)
 	}
 
-	return tokens
+	return postfixed
 }
 
 func tokenize(v string) Token {

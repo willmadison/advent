@@ -9,7 +9,7 @@ type Slope struct {
 }
 
 type Point struct {
-	X, Y int
+	X, Y, Z, W int
 }
 
 func (p Point) ManhattanDistance(other Point) int {

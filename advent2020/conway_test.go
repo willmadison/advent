@@ -1,6 +1,7 @@
 package advent2020
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -9,7 +10,10 @@ import (
 )
 
 func TestParseConwayCube(t *testing.T) {
-	t.Skip()
+	if os.Getenv("NO_CONWAY") != "" {
+		t.Skip()
+	}
+
 	given := strings.NewReader(`.#.
 ..#
 ###`)
@@ -42,7 +46,9 @@ func TestParseConwayCube(t *testing.T) {
 }
 
 func TestFindNeighboringLocations(t *testing.T) {
-	t.Skip()
+	if os.Getenv("NO_CONWAY") != "" {
+		t.Skip()
+	}
 	cell := CubeCell{location.Point{X: 0, Y: 0, Z: 0}, Inactive}
 
 	expectedNeighbors := []location.Point{
@@ -79,7 +85,10 @@ func TestFindNeighboringLocations(t *testing.T) {
 }
 
 func TestRunCubeCycle(t *testing.T) {
-	t.Skip()
+	if os.Getenv("NO_CONWAY") != "" {
+		t.Skip()
+	}
+
 	cells := []CubeCell{
 		{location.Point{X: 0, Y: 0}, Inactive},
 		{location.Point{X: 1, Y: 0}, Active},

@@ -109,7 +109,7 @@ func (s *Ship) Navigate(instructions []NavigationInstruction) {
 func (s *Ship) NavigateByWaypoint(instructions []NavigationInstruction) {
 	if s.Orientation == Unknown {
 		s.Orientation = Eastbound
-		s.Waypoint = location.Point{10, 1}
+		s.Waypoint = location.Point{X: 10, Y: 1}
 	}
 
 	for _, instruction := range instructions {

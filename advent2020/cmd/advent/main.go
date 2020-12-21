@@ -19,15 +19,23 @@ func main() {
 
 	defer response.Close()
 
-	expressions := advent2020.ParseExpressions(response)
+	ruleset, messages := advent2020.ParseRulesAndMessages(response)
 
-	fmt.Println("Parsed", len(expressions), "expressions...")
-
-	var sum int
-
-	for _, e := range expressions {
-		sum += advent2020.EvaluateExpression(e)
+	ruleset[8] = advent2020.Rule{
+		ID: 8,
+		Subrules: [][]int{
+			{42},
+			{42, 8},
+		},
 	}
 
-	fmt.Println(sum)
+	ruleset[11] = advent2020.Rule{
+		ID: 11,
+		Subrules: [][]int{
+			{42, 31},
+			{42, 11, 31},
+		},
+	}
+
+	fmt.Println(ruleset.FindMatches(0, messages))
 }

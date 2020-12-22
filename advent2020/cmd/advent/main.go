@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
@@ -19,23 +20,16 @@ func main() {
 
 	defer response.Close()
 
-	ruleset, messages := advent2020.ParseRulesAndMessages(response)
+	menu := advent2020.ParseFoodListing(response)
 
-	ruleset[8] = advent2020.Rule{
-		ID: 8,
-		Subrules: [][]int{
-			{42},
-			{42, 8},
-		},
+	nonAllergenics, allergicIngredients := menu.FindNonAllergenicIngredients()
+
+	var sum int
+
+	for _, occurrences := range menu.CountOccurrencesFor(nonAllergenics) {
+		sum += occurrences
 	}
 
-	ruleset[11] = advent2020.Rule{
-		ID: 11,
-		Subrules: [][]int{
-			{42, 31},
-			{42, 11, 31},
-		},
-	}
-
-	fmt.Println(ruleset.FindMatches(0, messages))
+	fmt.Println(sum)
+	fmt.Println(strings.Join(allergicIngredients, ","))
 }

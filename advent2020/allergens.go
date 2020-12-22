@@ -10,7 +10,6 @@ import (
 type FoodListing []Food
 
 func (f FoodListing) FindNonAllergenicIngredients() ([]string, []string) {
-	foodsByIngredient := map[string]map[int]struct{}{}
 	foodsByAllergen := map[string]map[int]struct{}{}
 
 	allIngredients := map[string]struct{}{}
@@ -18,14 +17,10 @@ func (f FoodListing) FindNonAllergenicIngredients() ([]string, []string) {
 	for i, food := range f {
 		for _, ingredient := range food.Ingredients {
 			for _, allergen := range food.Allergens {
-				if foodsByIngredient[ingredient] == nil {
-					foodsByIngredient[ingredient] = map[int]struct{}{}
-				}
 				if foodsByAllergen[allergen] == nil {
 					foodsByAllergen[allergen] = map[int]struct{}{}
 				}
 				allIngredients[ingredient] = struct{}{}
-				foodsByIngredient[ingredient][i] = struct{}{}
 				foodsByAllergen[allergen][i] = struct{}{}
 			}
 		}
@@ -96,11 +91,11 @@ func (f FoodListing) FindNonAllergenicIngredients() ([]string, []string) {
 		}
 	}
 
-	var nonAllergenics []string
+	var nonAllergens []string
 
 	for ingredient := range allIngredients {
 		if _, present := potentialAllergicIngredients[ingredient]; !present {
-			nonAllergenics = append(nonAllergenics, ingredient)
+			nonAllergens = append(nonAllergens, ingredient)
 		}
 	}
 
@@ -112,15 +107,15 @@ func (f FoodListing) FindNonAllergenicIngredients() ([]string, []string) {
 
 	sort.Strings(allergens)
 
-	var allergenics []string
+	var allergicIngredients []string
 
 	for _, allergen := range allergens {
 		for ingredient := range potentiallyHarmfulIngredients[allergen] {
-			allergenics = append(allergenics, ingredient)
+			allergicIngredients = append(allergicIngredients, ingredient)
 		}
 	}
 
-	return nonAllergenics, allergenics
+	return nonAllergens, allergicIngredients
 }
 
 func (f FoodListing) CountOccurrencesFor(ingredients []string) map[string]int {

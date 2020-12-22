@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/willmadison/advent/advent2020"
@@ -20,16 +19,15 @@ func main() {
 
 	defer response.Close()
 
-	menu := advent2020.ParseFoodListing(response)
+	imageTileset := advent2020.ParseImageTiles(response)
 
-	nonAllergenics, allergicIngredients := menu.FindNonAllergenicIngredients()
+	product := 1
 
-	var sum int
+	edgeTileIDs := imageTileset.FindCorners()
 
-	for _, occurrences := range menu.CountOccurrencesFor(nonAllergenics) {
-		sum += occurrences
+	for _, tileID := range edgeTileIDs {
+		product *= tileID
 	}
 
-	fmt.Println(sum)
-	fmt.Println(strings.Join(allergicIngredients, ","))
+	fmt.Println(product)
 }

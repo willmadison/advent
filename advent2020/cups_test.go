@@ -56,6 +56,8 @@ func TestMove(t *testing.T) {
 }
 
 func TestAdditionalMoves(t *testing.T) {
+	t.Skip("disabling long running test case")
+
 	circle := ParseCups(strings.NewReader("389125467"))
 
 	circle.AddAdditionalCups(1000000 - circle.Cups.Len())

@@ -19,9 +19,19 @@ func main() {
 
 	defer response.Close()
 
-	player1, player2 := advent2020.ParseDecks(response)
+	cups := advent2020.ParseCups(response)
 
-	winner := advent2020.RecursiveBattle(&player1, &player2)
+	// Part B.
+	cups.AddAdditionalCups(1000000 - cups.Cups.Len())
 
-	fmt.Println(winner.Score())
+	for i := 0; i < 10_000_000; i++ {
+		cups.Move()
+	}
+
+	first := cups.CupsByID[1]
+
+	a := first.Move(1).Value.(int)
+	b := first.Move(2).Value.(int)
+
+	fmt.Println(a * b)
 }

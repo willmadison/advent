@@ -19,15 +19,9 @@ func main() {
 
 	defer response.Close()
 
-	imageTileset := advent2020.ParseImageTiles(response)
+	player1, player2 := advent2020.ParseDecks(response)
 
-	product := 1
+	winner := advent2020.RecursiveBattle(&player1, &player2)
 
-	edgeTileIDs := imageTileset.FindCorners()
-
-	for _, tileID := range edgeTileIDs {
-		product *= tileID
-	}
-
-	fmt.Println(product)
+	fmt.Println(winner.Score())
 }

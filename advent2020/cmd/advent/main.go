@@ -19,19 +19,17 @@ func main() {
 
 	defer response.Close()
 
-	cups := advent2020.ParseCups(response)
+	floor := advent2020.ParseAllDirections(response)
 
-	// Part B.
-	cups.AddAdditionalCups(1000000 - cups.Cups.Len())
-
-	for i := 0; i < 10_000_000; i++ {
-		cups.Move()
+	for _, direction := range floor.AllDirections {
+		floor.Follow(direction)
 	}
 
-	first := cups.CupsByID[1]
+	fmt.Println(floor.GetBlackCount())
 
-	a := first.Move(1).Value.(int)
-	b := first.Move(2).Value.(int)
+	for i := 0; i < 100; i++ {
+		floor.Rotate()
+	}
 
-	fmt.Println(a * b)
+	fmt.Println(floor.GetBlackCount())
 }

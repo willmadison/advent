@@ -12,6 +12,17 @@ type Point struct {
 	X, Y, Z, W int
 }
 
+func (p Point) Neighbors() []Point {
+	return []Point{
+		{X: p.X + 1, Y: p.Y},
+		{X: p.X - 1, Y: p.Y},
+		{X: p.X, Y: p.Y + 1},
+		{X: p.X, Y: p.Y - 1},
+		{X: p.X + 1, Y: p.Y - 1},
+		{X: p.X - 1, Y: p.Y + 1},
+	}
+}
+
 func (p Point) ManhattanDistance(other Point) int {
 	return abs(p.X-other.X) + abs(p.Y-other.Y)
 }

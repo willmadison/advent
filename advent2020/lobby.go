@@ -11,13 +11,13 @@ type HexDirection string
 
 const (
 	Northward HexDirection = "n"
-	Northeast HexDirection = "ne"
-	Eastward  HexDirection = "e"
-	Southeast HexDirection = "se"
-	Southward HexDirection = "s"
-	Southwest HexDirection = "sw"
-	Westward  HexDirection = "w"
-	Northwest HexDirection = "nw"
+	Northeast              = "ne"
+	Eastward               = "e"
+	Southeast              = "se"
+	Southward              = "s"
+	Southwest              = "sw"
+	Westward               = "w"
+	Northwest              = "nw"
 )
 
 func ParseDirections(value string) []HexDirection {
@@ -81,18 +81,14 @@ func (f *Floor) Follow(directions []HexDirection) {
 
 	for _, d := range directions {
 		switch d {
-		case Northward:
-			location.Y++
-		case Northeast:
+		case Northward, Northeast:
 			location.Y++
 		case Eastward:
 			location.X++
 		case Southeast:
 			location.X++
 			location.Y--
-		case Southward:
-			location.Y--
-		case Southwest:
+		case Southward, Southwest:
 			location.Y--
 		case Westward:
 			location.X--

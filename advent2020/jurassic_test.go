@@ -85,8 +85,7 @@ Tile 1234:
 	}
 }
 
-func TestFindCorners(t *testing.T) {
-	given := strings.NewReader(`Tile 2311:
+var sampleInput = `Tile 2311:
 ..##.#..#.
 ##..#.....
 #...##..#.
@@ -192,13 +191,39 @@ Tile 3079:
 #.#####.##
 ..#.###...
 ..#.......
-..#.###...`)
+..#.###...`
+
+func TestFindCorners(t *testing.T) {
+	given := strings.NewReader(sampleInput)
 
 	givenTileset := ParseImageTiles(given)
 
 	expectedTileIDs := []int{1951, 3079, 2971, 1171}
 
-	actualTileIDs := givenTileset.FindCorners()
+	actualTileIDs, _ := givenTileset.FindCorners()
 
 	assert.ElementsMatch(t, expectedTileIDs, actualTileIDs)
+}
+
+func TestProperlyArrange(t *testing.T) {
+	given := strings.NewReader(sampleInput)
+
+	tileset := ParseImageTiles(given)
+
+	tileset.ProperlyArrange()
+
+	var tileIDs []int
+
+	for _, tile := range tileset {
+		tileIDs = append(tileIDs, tile.ID)
+	}
+
+	expectedTileIDs := []int{2971, 1489, 1171, 2729, 1427, 2473, 1951, 2311, 3079}
+	assert.Equal(t, expectedTileIDs, tileIDs)
+
+	fmt.Println()
+	fmt.Println()
+	fmt.Println(tileset.Print())
+	fmt.Println()
+	fmt.Println()
 }

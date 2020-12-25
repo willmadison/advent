@@ -54,10 +54,8 @@ func DetermineEncryptionKey(r io.Reader) int {
 	publicKeys := readPublicKeys(r)
 
 	var door Door
-	var card RoomCard
 
 	door.DeriveLoopNumber(publicKeys[0])
-	card.DeriveLoopNumber(publicKeys[1])
 
 	return door.Encrypt(publicKeys[1])
 }

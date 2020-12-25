@@ -19,17 +19,6 @@ func main() {
 
 	defer response.Close()
 
-	floor := advent2020.ParseAllDirections(response)
-
-	for _, direction := range floor.AllDirections {
-		floor.Follow(direction)
-	}
-
-	fmt.Println(floor.GetBlackCount())
-
-	for i := 0; i < 100; i++ {
-		floor.Rotate()
-	}
-
-	fmt.Println(floor.GetBlackCount())
+	key := advent2020.DetermineEncryptionKey(response)
+	fmt.Println(key)
 }

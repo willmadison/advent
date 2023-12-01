@@ -14,7 +14,4 @@ hs_err_pid*
 .gradle
 build
 .idea
-advent2017/cmd/advent/advent
-advent2018/cmd/advent/advent
-advent2020/cmd/advent/advent
-advent2021/cmd/advent/advent
+cmd/advent/advent

@@ -2,6 +2,7 @@ package advent2017
 
 import (
 	"testing"
+
 	"github.com/stretchr/testify/assert"
 )
 
@@ -85,11 +86,4 @@ func TestIsZeroCondition(t *testing.T) {
 	var condition Condition
 
 	assert.True(t, condition.IsZero())
-}
-
-func TestEval(t *testing.T) {
-	cases := []struct {
-		registers map[string]int
-		condition Condition
-	}{}
 }

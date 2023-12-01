@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/willmadison/advent/advent2021"
+	"github.com/willmadison/advent/advent2023"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -26,6 +26,6 @@ func main() {
 
 	defer response.Close()
 
-	answer := advent2021.SonarDepthIncreaseRate(response, advent2021.SlidingWindowStrategy)
+	answer := advent2023.ProcessCalibrationDocument(response)
 	fmt.Println(answer)
 }

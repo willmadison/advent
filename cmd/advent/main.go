@@ -26,6 +26,13 @@ func main() {
 
 	defer response.Close()
 
-	answer := advent2023.ProcessCalibrationDocument(response)
+	configs := advent2023.FindMinimumViableGameConfigs(response)
+
+	var answer int
+
+	for _, config := range configs {
+		answer += config[advent2023.Red] * config[advent2023.Blue] * config[advent2023.Green]
+	}
+
 	fmt.Println(answer)
 }

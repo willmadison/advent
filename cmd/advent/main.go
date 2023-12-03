@@ -26,13 +26,11 @@ func main() {
 
 	defer response.Close()
 
-	configs := advent2023.FindMinimumViableGameConfigs(response)
+	partNumbers, gearLocations := advent2023.FindPartNumbers(response)
 
 	var answer int
 
-	for _, config := range configs {
-		answer += config[advent2023.Red] * config[advent2023.Blue] * config[advent2023.Green]
-	}
+	answer = advent2023.DetermineTotalGearRatio(partNumbers, gearLocations)
 
 	fmt.Println(answer)
 }

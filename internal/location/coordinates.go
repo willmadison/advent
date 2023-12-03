@@ -4,6 +4,19 @@ type Coordinate struct {
 	Row, Col int
 }
 
+func (c Coordinate) Neighbors() []Coordinate {
+	return []Coordinate{
+		{Row: c.Row - 1, Col: c.Col - 1},
+		{Row: c.Row - 1, Col: c.Col},
+		{Row: c.Row - 1, Col: c.Col + 1},
+		{Row: c.Row, Col: c.Col + 1},
+		{Row: c.Row + 1, Col: c.Col + 1},
+		{Row: c.Row + 1, Col: c.Col},
+		{Row: c.Row + 1, Col: c.Col - 1},
+		{Row: c.Row, Col: c.Col - 1},
+	}
+}
+
 type Slope struct {
 	Rise, Run int
 }

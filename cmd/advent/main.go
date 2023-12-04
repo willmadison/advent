@@ -26,11 +26,13 @@ func main() {
 
 	defer response.Close()
 
-	partNumbers, gearLocations := advent2023.FindPartNumbers(response)
+	_, countsByCardNumber := advent2023.FindWinningScratchcards(response)
 
 	var answer int
 
-	answer = advent2023.DetermineTotalGearRatio(partNumbers, gearLocations)
+	for _, count := range countsByCardNumber {
+		answer += count
+	}
 
 	fmt.Println(answer)
 }

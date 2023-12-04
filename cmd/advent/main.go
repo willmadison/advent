@@ -26,6 +26,8 @@ func main() {
 
 	defer response.Close()
 
+	start := time.Now()
+
 	_, countsByCardNumber := advent2023.FindWinningScratchcards(response)
 
 	var answer int
@@ -33,6 +35,8 @@ func main() {
 	for _, count := range countsByCardNumber {
 		answer += count
 	}
+
+	fmt.Println("solved in", time.Since(start))
 
 	fmt.Println(answer)
 }

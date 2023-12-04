@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/willmadison/advent/advent2023"
 	"github.com/willmadison/advent/internal/problems"
 )
@@ -36,7 +37,9 @@ func main() {
 		answer += count
 	}
 
-	fmt.Println("solved in", time.Since(start))
+	color.Green("=================")
+	color.Green("%v", answer)
+	color.Green("=================")
 
-	fmt.Println(answer)
+	fmt.Println("solved in", time.Since(start))
 }

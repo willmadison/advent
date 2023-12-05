@@ -29,13 +29,9 @@ func main() {
 
 	start := time.Now()
 
-	_, countsByCardNumber := advent2023.FindWinningScratchcards(response)
+	var answer uint64
 
-	var answer int
-
-	for _, count := range countsByCardNumber {
-		answer += count
-	}
+	answer = advent2023.FindLowestLocation(response, advent2023.Pairwise)
 
 	color.Green("=================")
 	color.Green("%v", answer)

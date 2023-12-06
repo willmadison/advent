@@ -9,7 +9,7 @@ import (
 )
 
 type RaceStrategy struct {
-	Winners        []Winner
+	Winners        int
 	RecordDistance int
 	TimeAlloted    int
 }
@@ -28,15 +28,20 @@ const (
 )
 
 func (r *RaceStrategy) DetermineWinners() {
-	for t := r.TimeAlloted - 1; t > 0; t-- {
-		w := Winner{ChargingTime: t, Rate: t}
-		runtime := r.TimeAlloted - t
-		w.DistanceTraveled = w.Rate * runtime
+	var minChargingTime int
 
-		if w.DistanceTraveled > r.RecordDistance {
-			r.Winners = append(r.Winners, w)
+	for t := 0; t < r.RecordDistance; t++ {
+		rate := t
+		runtime := r.TimeAlloted - t
+		d := rate * runtime
+
+		if d > r.RecordDistance {
+			minChargingTime = t
+			break
 		}
 	}
+
+	r.Winners = r.TimeAlloted - 2*minChargingTime + 1
 }
 
 func FindWinningRaceStrategies(r io.Reader, kernings ...Kerning) []*RaceStrategy {
@@ -104,7 +109,6 @@ func FindWinningRaceStrategies(r io.Reader, kernings ...Kerning) []*RaceStrategy
 
 	for i, time := range times {
 		strategies = append(strategies, &RaceStrategy{
-			Winners:        []Winner{},
 			RecordDistance: distances[i],
 			TimeAlloted:    time,
 		})

@@ -36,7 +36,7 @@ func main() {
 	total := 1
 
 	for _, strategy := range strategies {
-		total *= len(strategy.Winners)
+		total *= strategy.Winners
 	}
 
 	answer = total

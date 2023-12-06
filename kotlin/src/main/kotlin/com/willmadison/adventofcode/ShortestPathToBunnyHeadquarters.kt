@@ -20,19 +20,19 @@ class Person(val currentPosition: Coordinate = Coordinate(), var currentDirectio
     private fun turn(vector: Vector) {
         when (vector.direction) {
             'R' -> {
-                when (currentDirection) {
-                    Direction.NORTH -> currentDirection = Direction.EAST
-                    Direction.SOUTH -> currentDirection = Direction.WEST
-                    Direction.EAST -> currentDirection = Direction.SOUTH
-                    Direction.WEST -> currentDirection = Direction.NORTH
+                currentDirection = when (currentDirection) {
+                    Direction.NORTH -> Direction.EAST
+                    Direction.SOUTH -> Direction.WEST
+                    Direction.EAST -> Direction.SOUTH
+                    Direction.WEST -> Direction.NORTH
                 }
             }
             'L' -> {
-                when (currentDirection) {
-                    Direction.NORTH -> currentDirection = Direction.WEST
-                    Direction.SOUTH -> currentDirection = Direction.EAST
-                    Direction.EAST -> currentDirection = Direction.NORTH
-                    Direction.WEST -> currentDirection = Direction.SOUTH
+                currentDirection = when (currentDirection) {
+                    Direction.NORTH -> Direction.WEST
+                    Direction.SOUTH -> Direction.EAST
+                    Direction.EAST -> Direction.NORTH
+                    Direction.WEST -> Direction.SOUTH
                 }
             }
         }

@@ -23,7 +23,7 @@ Distance:  9  40  200`)
 	actualTotal := 1
 
 	for _, strategy := range strategies {
-		actualTotal *= len(strategy.Winners)
+		actualTotal *= strategy.Winners
 	}
 
 	assert.Equal(t, expectedTotal, actualTotal)
@@ -44,7 +44,7 @@ Distance:  9  40  200`)
 	actualTotal := 1
 
 	for _, strategy := range strategies {
-		actualTotal *= len(strategy.Winners)
+		actualTotal *= strategy.Winners
 	}
 
 	assert.Equal(t, expectedTotal, actualTotal)

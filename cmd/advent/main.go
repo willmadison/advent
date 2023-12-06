@@ -29,9 +29,17 @@ func main() {
 
 	start := time.Now()
 
-	var answer uint64
+	strategies := advent2023.FindWinningRaceStrategies(response, advent2023.Good)
 
-	answer = advent2023.FindLowestLocation(response, advent2023.Pairwise)
+	var answer int
+
+	total := 1
+
+	for _, strategy := range strategies {
+		total *= len(strategy.Winners)
+	}
+
+	answer = total
 
 	color.Green("=================")
 	color.Green("%v", answer)

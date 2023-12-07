@@ -29,17 +29,13 @@ func main() {
 
 	start := time.Now()
 
-	strategies := advent2023.FindWinningRaceStrategies(response, advent2023.Good)
+	wagers := advent2023.SortCamelCardWagers(response, advent2023.JokersWild)
 
 	var answer int
 
-	total := 1
-
-	for _, strategy := range strategies {
-		total *= strategy.Winners
+	for rank, wager := range wagers {
+		answer += (rank + 1) * wager.Bid
 	}
-
-	answer = total
 
 	color.Green("=================")
 	color.Green("%v", answer)

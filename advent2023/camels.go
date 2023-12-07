@@ -68,7 +68,7 @@ type Hand struct {
 	Type  HandType
 }
 
-func newHand(cards []Card, rule Rule) Hand {
+func NewHand(cards []Card, rule Rule) Hand {
 	hand := Hand{Cards: cards}
 
 	var handType HandType
@@ -88,6 +88,7 @@ func newHand(cards []Card, rule Rule) Hand {
 		for card, count := range countsByCard {
 			if count > highestFrequency {
 				mostFrequentCard = card
+				highestFrequency = count
 			}
 		}
 
@@ -209,5 +210,5 @@ func parseWager(line string, rules ...Rule) Wager {
 		cards = append(cards, card)
 	}
 
-	return Wager{Hand: newHand(cards, rule), Bid: bid}
+	return Wager{Hand: NewHand(cards, rule), Bid: bid}
 }

@@ -55,3 +55,11 @@ QQQJA 483`)
 
 	assert.Equal(t, expectedTotalWinnings, totalWinnings)
 }
+
+func TestNewHand(t *testing.T) {
+	cards := []advent2023.Card{advent2023.Joker, advent2023.King, advent2023.Queen, advent2023.King, advent2023.King}
+
+	hand := advent2023.NewHand(cards, advent2023.JokersWild)
+
+	assert.Equal(t, advent2023.FourOfAKind, hand.Type)
+}

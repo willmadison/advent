@@ -2,6 +2,8 @@ package advent2023
 
 import (
 	"bufio"
+	"bytes"
+	"fmt"
 	"io"
 	"sort"
 	"strconv"
@@ -44,6 +46,23 @@ var cardsByLabel = map[rune]Card{
 	'A': Ace,
 }
 
+var labelsByCard = map[Card]rune{
+	Two:   '2',
+	Three: '3',
+	Four:  '4',
+	Five:  '5',
+	Six:   '6',
+	Seven: '7',
+	Eight: '8',
+	Nine:  '9',
+	Ten:   'T',
+	Jack:  'J',
+	Joker: 'J',
+	Queen: 'Q',
+	King:  'K',
+	Ace:   'A',
+}
+
 type Rule int
 
 const (
@@ -66,6 +85,16 @@ const (
 type Hand struct {
 	Cards []Card
 	Type  HandType
+}
+
+func (h *Hand) String() string {
+	var buf bytes.Buffer
+
+	for _, c := range h.Cards {
+		buf.WriteRune(labelsByCard[c])
+	}
+
+	return buf.String()
 }
 
 func NewHand(cards []Card, rule Rule) Hand {
@@ -144,6 +173,10 @@ func NewHand(cards []Card, rule Rule) Hand {
 type Wager struct {
 	Hand Hand
 	Bid  int
+}
+
+func (w *Wager) String() string {
+	return fmt.Sprintf("%v %v", w.Hand.String(), w.Bid)
 }
 
 func SortCamelCardWagers(r io.Reader, rules ...Rule) []Wager {

@@ -29,13 +29,9 @@ func main() {
 
 	start := time.Now()
 
-	wagers := advent2023.SortCamelCardWagers(response, advent2023.JokersWild)
-
 	var answer int
 
-	for rank, wager := range wagers {
-		answer += (rank + 1) * wager.Bid
-	}
+	answer = advent2023.DetermineGhostlyTripLength(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

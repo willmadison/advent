@@ -1,7 +1,6 @@
 package advent2023_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -88,10 +87,11 @@ JJJJ2 41`)
 
 	wagers := advent2023.SortCamelCardWagers(given, advent2023.JokersWild)
 
-	for _, wager := range wagers {
-		fmt.Println(wager.String())
-	}
-
+	/*
+		for _, wager := range wagers {
+			fmt.Println(wager.String())
+		}
+	*/
 	expectedTotalWinnings := 7460
 
 	totalWinnings := 0

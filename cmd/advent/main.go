@@ -31,7 +31,11 @@ func main() {
 
 	var answer int
 
-	answer = advent2023.DetermineGhostlyTripLength(response)
+	readings := advent2023.ExtrapolateSenorReadings(response)
+
+	for _, r := range readings {
+		answer += r[0]
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

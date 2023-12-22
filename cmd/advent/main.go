@@ -31,11 +31,7 @@ func main() {
 
 	var answer int
 
-	readings := advent2023.ExtrapolateSenorReadings(response)
-
-	for _, r := range readings {
-		answer += r[0]
-	}
+	answer = advent2023.DistanceToFurthestPipeFromStart(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

@@ -40,6 +40,31 @@ func (p Point) ManhattanDistance(other Point) int {
 	return abs(p.X-other.X) + abs(p.Y-other.Y)
 }
 
+type CardinalDirection uint
+
+const (
+	North CardinalDirection = iota
+	East
+	South
+	West
+)
+
+func (d CardinalDirection) Reverse() CardinalDirection {
+	return (d + 2) % 4
+}
+
+type Vector struct {
+	Point
+	Direction CardinalDirection
+}
+
+var Vectors = []Vector{
+	{Point: Point{X: 0, Y: 1}, Direction: East},
+	{Point: Point{X: 0, Y: -1}, Direction: West},
+	{Point: Point{X: 1, Y: 0}, Direction: South},
+	{Point: Point{X: -1, Y: 0}, Direction: North},
+}
+
 type Direction int
 
 const (
@@ -55,6 +80,10 @@ func (p *Point) Rotate90(direction Direction) {
 	case Counterclockwise:
 		p.X, p.Y = -p.Y, p.X
 	}
+}
+
+func (p Point) Add(other Point) Point {
+	return Point{X: p.X + other.X, Y: p.Y + other.Y}
 }
 
 func abs(x int) int {

@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/willmadison/advent/advent2023"
+	"github.com/willmadison/advent/advent2024"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -29,9 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	var answer int
-
-	answer = advent2023.DistanceToFurthestPipeFromStart(response)
+	answer := advent2024.SimilarityScore(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

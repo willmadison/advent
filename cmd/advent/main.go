@@ -29,7 +29,15 @@ func main() {
 
 	start := time.Now()
 
-	answer := advent2024.SimilarityScore(response)
+	reports, _ := advent2024.ParseReports(response)
+
+	var answer int
+
+	for _, report := range reports {
+		if report.IsSafeWithTolerance() {
+			answer++
+		}
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

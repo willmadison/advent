@@ -29,14 +29,14 @@ func main() {
 
 	start := time.Now()
 
-	reports, _ := advent2024.ParseReports(response)
+	instructions, _ := advent2024.FindInstructions(response)
 
 	var answer int
 
-	for _, report := range reports {
-		if report.IsSafeWithTolerance() {
-			answer++
-		}
+	doableInstructions := advent2024.FindDoables(instructions)
+
+	for _, instruction := range doableInstructions {
+		answer += instruction.Operands[0] * instruction.Operands[1]
 	}
 
 	color.Green("=================")

@@ -1,12 +1,13 @@
 package location
 
+import "slices"
+
 type Coordinate struct {
 	Row, Col int
 }
 
 func (c Coordinate) Neighbors() []Coordinate {
 	return []Coordinate{
-		{Row: c.Row - 1, Col: c.Col - 1},
 		{Row: c.Row - 1, Col: c.Col},
 		{Row: c.Row - 1, Col: c.Col + 1},
 		{Row: c.Row, Col: c.Col + 1},
@@ -14,7 +15,56 @@ func (c Coordinate) Neighbors() []Coordinate {
 		{Row: c.Row + 1, Col: c.Col},
 		{Row: c.Row + 1, Col: c.Col - 1},
 		{Row: c.Row, Col: c.Col - 1},
+		{Row: c.Row - 1, Col: c.Col - 1},
 	}
+}
+
+func (c Coordinate) WithNextN(n int, direction CardinalDirection) []Coordinate {
+	var coordinates []Coordinate
+
+	var delta Coordinate
+
+	switch direction {
+	case North:
+		delta = Coordinate{Row: -1, Col: 0}
+	case Northeast:
+		delta = Coordinate{Row: -1, Col: 1}
+	case East:
+		delta = Coordinate{Row: 0, Col: 1}
+	case Southeast:
+		delta = Coordinate{Row: 1, Col: 1}
+	case South:
+		delta = Coordinate{Row: 1, Col: 0}
+	case Southwest:
+		delta = Coordinate{Row: 1, Col: -1}
+	case West:
+		delta = Coordinate{Row: 0, Col: -1}
+	case Northwest:
+		delta = Coordinate{Row: -1, Col: -1}
+	}
+
+	coordinate := Coordinate{Row: c.Row, Col: c.Col}
+
+	coordinates = append(coordinates, coordinate)
+
+	for len(coordinates) < n+1 {
+		coordinate = Coordinate{Row: coordinate.Row + delta.Row, Col: coordinate.Col + delta.Col}
+		coordinates = append(coordinates, coordinate)
+	}
+
+	slices.SortFunc(coordinates, func(a, b Coordinate) int {
+		if a.Row != b.Row {
+			return a.Row - b.Row
+		}
+
+		return a.Col - b.Col
+	})
+
+	return coordinates
+}
+
+func (c Coordinate) InBounds(rows, cols int) bool {
+	return c.Row >= 0 && c.Row < rows && c.Col >= 0 && c.Col < cols
 }
 
 type Slope struct {
@@ -44,9 +94,13 @@ type CardinalDirection uint
 
 const (
 	North CardinalDirection = iota
+	Northeast
 	East
+	Southeast
 	South
+	Southwest
 	West
+	Northwest
 )
 
 func (d CardinalDirection) Reverse() CardinalDirection {

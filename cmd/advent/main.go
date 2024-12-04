@@ -29,15 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	instructions, _ := advent2024.FindInstructions(response)
-
-	var answer int
-
-	doableInstructions := advent2024.FindDoables(instructions)
-
-	for _, instruction := range doableInstructions {
-		answer += instruction.Operands[0] * instruction.Operands[1]
-	}
+	answer, _ := advent2024.CountXs(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

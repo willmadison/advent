@@ -29,7 +29,16 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2024.CountXs(response)
+	ruleset, pagelists, _ := advent2024.ParseRulesAndPages(response)
+
+	var answer int
+
+	for _, pages := range pagelists {
+		if !advent2024.CanPrint(ruleset, pages) {
+			corrected := advent2024.CorrectPrintRequest(ruleset, pages)
+			answer += pages[len(corrected)/2]
+		}
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

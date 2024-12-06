@@ -29,16 +29,9 @@ func main() {
 
 	start := time.Now()
 
-	ruleset, pagelists, _ := advent2024.ParseRulesAndPages(response)
+	obstacles, guard, dimensions, _ := advent2024.ParseMap(response)
 
-	var answer int
-
-	for _, pages := range pagelists {
-		if !advent2024.CanPrint(ruleset, pages) {
-			corrected := advent2024.CorrectPrintRequest(ruleset, pages)
-			answer += pages[len(corrected)/2]
-		}
-	}
+	answer := advent2024.IntroduceObstacles(guard, obstacles, dimensions)
 
 	color.Green("=================")
 	color.Green("%v", answer)

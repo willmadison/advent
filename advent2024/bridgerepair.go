@@ -13,29 +13,27 @@ type PartialEquation struct {
 	Operands      []int
 }
 
-func (e PartialEquation) OperatorAlternatives() [][]Operator {
+func (e PartialEquation) OperatorAlternatives(operatorsConsidered ...Operator) [][]Operator {
+	if len(operatorsConsidered) == 0 {
+		operatorsConsidered = []Operator{Plus, Times}
+	}
+
 	numBits := len(e.Operands) - 1
 
 	start := 0
-	end := int(math.Pow(2, float64(numBits)) - 1)
+
+	base := len(operatorsConsidered)
+
+	end := int(math.Pow(float64(base), float64(numBits)) - 1)
 
 	var alternatives [][]Operator
 
 	for i := start; i <= end; i++ {
 		var alternative []Operator
 
-		for bit := numBits - 1; bit >= 0; bit-- {
-			bitSet := i&(1<<bit) == 0
-
-			var operator Operator
-
-			if bitSet {
-				operator = Times
-			} else {
-				operator = Plus
-			}
-
-			alternative = append(alternative, operator)
+		for digit := numBits - 1; digit >= 0; digit-- {
+			digitValue := getDigit(i, base, digit)
+			alternative = append(alternative, operatorsConsidered[digitValue])
 		}
 
 		alternatives = append(alternatives, alternative)
@@ -44,11 +42,23 @@ func (e PartialEquation) OperatorAlternatives() [][]Operator {
 	return alternatives
 }
 
-func (p PartialEquation) CouldBeMadeTrue() bool {
-	alternatives := p.OperatorAlternatives()
+func getDigit(value, base, digit int) int {
+	asString := strconv.FormatInt(int64(value), base)
+
+	for len(asString) <= digit {
+		asString = "0" + asString
+	}
+
+	needle, _ := strconv.Atoi(string(asString[len(asString)-digit-1]))
+
+	return needle
+}
+
+func (p PartialEquation) CouldBeMadeTrue(ops ...Operator) bool {
+	alternatives := p.OperatorAlternatives(ops...)
 
 	for _, operators := range alternatives {
-		if p.ExpectedValue == p.evalute(operators) {
+		if p.ExpectedValue == p.evaluate(operators) {
 			return true
 		}
 	}
@@ -56,7 +66,7 @@ func (p PartialEquation) CouldBeMadeTrue() bool {
 	return false
 }
 
-func (p PartialEquation) evalute(operators []Operator) int {
+func (p PartialEquation) evaluate(operators []Operator) int {
 	answer := p.Operands[0]
 
 	for i := 1; i < len(p.Operands); i++ {
@@ -66,6 +76,15 @@ func (p PartialEquation) evalute(operators []Operator) int {
 			answer += p.Operands[i]
 		case Times:
 			answer *= p.Operands[i]
+		case Concat:
+			var sb strings.Builder
+
+			sb.WriteString(strconv.Itoa(answer))
+			sb.WriteString(strconv.Itoa(p.Operands[i]))
+
+			temp := sb.String()
+
+			answer, _ = strconv.Atoi(temp)
 		}
 	}
 
@@ -75,10 +94,12 @@ func (p PartialEquation) evalute(operators []Operator) int {
 type Operator int
 
 const (
-	None Operator = -1
 	Plus Operator = iota
 	Times
+	Concat
 )
+
+var AllOperators = []Operator{Plus, Times, Concat}
 
 func ParseCalibrationEquations(r io.Reader) ([]PartialEquation, error) {
 	var equations []PartialEquation

@@ -34,7 +34,7 @@ func main() {
 	var answer int
 
 	for _, e := range equations {
-		if e.CouldBeMadeTrue() {
+		if e.CouldBeMadeTrue(advent2024.AllOperators...) {
 			answer += e.ExpectedValue
 		}
 	}

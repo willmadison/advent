@@ -29,9 +29,15 @@ func main() {
 
 	start := time.Now()
 
-	obstacles, guard, dimensions, _ := advent2024.ParseMap(response)
+	equations, _ := advent2024.ParseCalibrationEquations(response)
 
-	answer := advent2024.IntroduceObstacles(guard, obstacles, dimensions)
+	var answer int
+
+	for _, e := range equations {
+		if e.CouldBeMadeTrue() {
+			answer += e.ExpectedValue
+		}
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

@@ -29,15 +29,11 @@ func main() {
 
 	start := time.Now()
 
-	equations, _ := advent2024.ParseCalibrationEquations(response)
+	antennae, dimensions := advent2024.FindAntennae(response)
 
-	var answer int
+	antinodes := advent2024.FindResonantAntinodes(antennae, dimensions)
 
-	for _, e := range equations {
-		if e.CouldBeMadeTrue(advent2024.AllOperators...) {
-			answer += e.ExpectedValue
-		}
-	}
+	answer := len(antinodes)
 
 	color.Green("=================")
 	color.Green("%v", answer)

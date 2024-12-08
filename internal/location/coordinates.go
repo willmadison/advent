@@ -67,6 +67,10 @@ func (c Coordinate) InBounds(rows, cols int) bool {
 	return c.Row >= 0 && c.Row < rows && c.Col >= 0 && c.Col < cols
 }
 
+func (c Coordinate) Delta(other Coordinate) Coordinate {
+	return Coordinate{Row: c.Row - other.Row, Col: c.Col - other.Col}
+}
+
 type Slope struct {
 	Rise, Run int
 }

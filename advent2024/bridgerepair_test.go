@@ -31,6 +31,7 @@ func TestParseCalibrationEquations(t *testing.T) {
 	expectedNumberOfOperands := 2
 
 	assert.Equal(t, expectedExpectedValue, equations[0].ExpectedValue)
+	assert.True(t, expectedNumberOfOperands > 0)
 	assert.Equal(t, expectedNumberOfOperands, len(equations[0].Operands))
 }
 

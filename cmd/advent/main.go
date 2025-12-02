@@ -29,7 +29,13 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.CrackPasswordV2(response)
+	identifiers, _ := advent2025.FindInvalidIdentifiers(response, advent2025.AtLeastTwice)
+
+	var answer int64
+
+	for _, id := range identifiers {
+		answer += id
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

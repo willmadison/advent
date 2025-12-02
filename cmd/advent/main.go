@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/willmadison/advent/advent2024"
+	"github.com/willmadison/advent/advent2025"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -29,11 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	antennae, dimensions := advent2024.FindAntennae(response)
-
-	antinodes := advent2024.FindResonantAntinodes(antennae, dimensions)
-
-	answer := len(antinodes)
+	answer, _ := advent2025.CrackPasswordV2(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

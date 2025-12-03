@@ -29,12 +29,12 @@ func main() {
 
 	start := time.Now()
 
-	identifiers, _ := advent2025.FindInvalidIdentifiers(response, advent2025.AtLeastTwice)
+	joltages, _ := advent2025.FindMaximumJoltages(response, 12)
 
 	var answer int64
 
-	for _, id := range identifiers {
-		answer += id
+	for _, joltage := range joltages {
+		answer += joltage
 	}
 
 	color.Green("=================")

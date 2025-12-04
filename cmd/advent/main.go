@@ -29,13 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	joltages, _ := advent2025.FindMaximumJoltages(response, 12)
-
-	var answer int64
-
-	for _, joltage := range joltages {
-		answer += joltage
-	}
+	answer, _ := advent2025.RemoveAllAccessiblePaperRolls(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

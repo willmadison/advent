@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.RemoveAllAccessiblePaperRolls(response)
+	answer, _ := advent2025.EnumerateFreshIngredientIds(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

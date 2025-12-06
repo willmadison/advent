@@ -29,7 +29,13 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.EnumerateFreshIngredientIds(response)
+	subtotals, _ := advent2025.CheckWorksheet(response, advent2025.Cephalopod)
+
+	var answer int64
+
+	for _, v := range subtotals {
+		answer += v
+	}
 
 	color.Green("=================")
 	color.Green("%v", answer)

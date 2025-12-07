@@ -1,7 +1,6 @@
 package advent2025_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -18,7 +17,6 @@ func TestFindMaximumJoltages(t *testing.T) {
 	expectedJoltages := []int64{98, 89, 78, 92}
 
 	joltages, err := advent2025.FindMaximumJoltages(given, 2)
-	fmt.Println("joltages:", joltages)
 
 	assert.Nil(t, err)
 
@@ -32,7 +30,6 @@ func TestFindMaximumJoltages(t *testing.T) {
 	expectedJoltages = []int64{987654321111, 811111111119, 434234234278, 888911112111}
 
 	joltages, err = advent2025.FindMaximumJoltages(given, 12)
-	fmt.Println("joltages:", joltages)
 
 	assert.Nil(t, err)
 

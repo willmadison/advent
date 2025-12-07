@@ -29,13 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	subtotals, _ := advent2025.CheckWorksheet(response, advent2025.Cephalopod)
-
-	var answer int64
-
-	for _, v := range subtotals {
-		answer += v
-	}
+	answer, _ := advent2025.CountQuantumTimelines(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

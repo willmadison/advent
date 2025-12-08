@@ -94,6 +94,10 @@ func (p Point) ManhattanDistance(other Point) int {
 	return abs(p.X-other.X) + abs(p.Y-other.Y)
 }
 
+func (p Point) EuclideanDistance(other Point) int {
+	return (p.X-other.X)*(p.X-other.X) + (p.Y-other.Y)*(p.Y-other.Y) + (p.Z-other.Z)*(p.Z-other.Z)
+}
+
 type CardinalDirection uint
 
 const (

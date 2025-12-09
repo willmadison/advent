@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.FindLastConnectionToUnify(response)
+	answer, _ := advent2025.FindMaxiumAreaRectangleWithConstraints(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

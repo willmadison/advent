@@ -1,4 +1,4 @@
-package heaps
+package containers
 
 import "cmp"
 

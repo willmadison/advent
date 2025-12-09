@@ -1,15 +1,15 @@
-package heaps_test
+package containers_test
 
 import (
 	"container/heap"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/willmadison/advent/internal/heaps"
+	"github.com/willmadison/advent/internal/containers"
 )
 
 func TestMinHeap(t *testing.T) {
-	minHeap := heaps.NewMinHeap[int]()
+	minHeap := containers.NewMinHeap[int]()
 	heap.Init(minHeap)
 	heap.Push(minHeap, 3)
 	heap.Push(minHeap, 1)
@@ -22,7 +22,7 @@ func TestMinHeap(t *testing.T) {
 }
 
 func TestMaxHeap(t *testing.T) {
-	maxHeap := heaps.NewMaxHeap[int]()
+	maxHeap := containers.NewMaxHeap[int]()
 	heap.Init(maxHeap)
 	heap.Push(maxHeap, 1)
 	heap.Push(maxHeap, 3)

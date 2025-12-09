@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/willmadison/advent/internal/stacks"
+	"github.com/willmadison/advent/internal/containers"
 )
 
 func FindMaximumJoltages(r io.Reader, maxDigits int) ([]int64, error) {
@@ -77,7 +77,7 @@ func determineMaximimumNDigitJoltage(digits []int, maxDigits int) int64 {
 
 	removalsAllowed := numDigits - maxDigits
 
-	stack := stacks.NewStack[int]()
+	stack := containers.NewStack[int]()
 
 	for _, digit := range digits {
 		for removalsAllowed > 0 && stack.Size() > 0 {

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/willmadison/advent/internal/heaps"
+	"github.com/willmadison/advent/internal/containers"
 )
 
 func DoFindTotalDistance(r io.Reader) int {
@@ -15,8 +15,8 @@ func DoFindTotalDistance(r io.Reader) int {
 }
 
 func MatchPairs(r io.Reader) [][]int {
-	left := heaps.NewMinHeap[int]()
-	right := heaps.NewMinHeap[int]()
+	left := containers.NewMinHeap[int]()
+	right := containers.NewMinHeap[int]()
 
 	heap.Init(left)
 	heap.Init(right)

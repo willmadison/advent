@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/willmadison/advent/internal/containers"
 	"github.com/willmadison/advent/internal/location"
 )
 
@@ -303,27 +304,26 @@ func fillCompressedExterior(grid [][]bool, rows, cols int) {
 	}
 
 	type pos struct{ r, c int }
-	queue := []pos{}
+	queue := containers.NewQueue[pos]()
 
 	for r := 0; r < rows; r++ {
 		for c := 0; c < cols; c++ {
 			if (r == 0 || r == rows-1 || c == 0 || c == cols-1) && !grid[r][c] {
 				visited[r][c] = true
-				queue = append(queue, pos{r, c})
+				queue.Enqueue(pos{r, c})
 			}
 		}
 	}
 
 	directions := []pos{{0, 1}, {0, -1}, {1, 0}, {-1, 0}}
-	for len(queue) > 0 {
-		curr := queue[0]
-		queue = queue[1:]
+	for queue.Size() > 0 {
+		curr, _ := queue.Dequeue()
 
 		for _, dir := range directions {
 			nr, nc := curr.r+dir.r, curr.c+dir.c
 			if nr >= 0 && nr < rows && nc >= 0 && nc < cols && !visited[nr][nc] && !grid[nr][nc] {
 				visited[nr][nc] = true
-				queue = append(queue, pos{nr, nc})
+				queue.Enqueue(pos{nr, nc})
 			}
 		}
 	}

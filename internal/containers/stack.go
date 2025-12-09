@@ -1,4 +1,4 @@
-package stacks
+package containers
 
 import (
 	"cmp"

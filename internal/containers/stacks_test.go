@@ -1,26 +1,28 @@
-package stacks
+package containers_test
 
 import (
 	"testing"
+
+	"github.com/willmadison/advent/internal/containers"
 )
 
 func TestNewStack(t *testing.T) {
 	t.Run("creates empty int stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		if s.Size() != 0 {
 			t.Errorf("expected size 0, got %d", s.Size())
 		}
 	})
 
 	t.Run("creates empty string stack", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 		if s.Size() != 0 {
 			t.Errorf("expected size 0, got %d", s.Size())
 		}
 	})
 
 	t.Run("creates empty float64 stack", func(t *testing.T) {
-		s := NewStack[float64]()
+		s := containers.NewStack[float64]()
 		if s.Size() != 0 {
 			t.Errorf("expected size 0, got %d", s.Size())
 		}
@@ -29,7 +31,7 @@ func TestNewStack(t *testing.T) {
 
 func TestPush(t *testing.T) {
 	t.Run("pushes single element", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		s.Push(42)
 
 		if s.Size() != 1 {
@@ -46,7 +48,7 @@ func TestPush(t *testing.T) {
 	})
 
 	t.Run("pushes multiple elements", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		values := []int{1, 2, 3, 4, 5}
 
 		for _, v := range values {
@@ -67,7 +69,7 @@ func TestPush(t *testing.T) {
 	})
 
 	t.Run("pushes strings", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 		s.Push("hello")
 		s.Push("world")
 
@@ -87,7 +89,7 @@ func TestPush(t *testing.T) {
 
 func TestPop(t *testing.T) {
 	t.Run("pops single element", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		s.Push(42)
 
 		val, err := s.Pop()
@@ -103,7 +105,7 @@ func TestPop(t *testing.T) {
 	})
 
 	t.Run("pops in LIFO order", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		values := []int{1, 2, 3, 4, 5}
 
 		for _, v := range values {
@@ -127,7 +129,7 @@ func TestPop(t *testing.T) {
 	})
 
 	t.Run("returns error when popping from empty stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		val, err := s.Pop()
 		if err == nil {
@@ -142,7 +144,7 @@ func TestPop(t *testing.T) {
 	})
 
 	t.Run("returns error when popping after stack is emptied", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 		s.Push("test")
 
 		// First pop succeeds
@@ -164,7 +166,7 @@ func TestPop(t *testing.T) {
 
 func TestPeek(t *testing.T) {
 	t.Run("peeks without removing element", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		s.Push(42)
 
 		val1, err := s.Peek()
@@ -191,7 +193,7 @@ func TestPeek(t *testing.T) {
 	})
 
 	t.Run("returns error when peeking empty stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		val, err := s.Peek()
 		if err == nil {
@@ -206,7 +208,7 @@ func TestPeek(t *testing.T) {
 	})
 
 	t.Run("peeks correct element after multiple pushes", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 		s.Push("first")
 		s.Push("second")
 		s.Push("third")
@@ -223,14 +225,14 @@ func TestPeek(t *testing.T) {
 
 func TestSize(t *testing.T) {
 	t.Run("returns 0 for new stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		if s.Size() != 0 {
 			t.Errorf("expected size 0, got %d", s.Size())
 		}
 	})
 
 	t.Run("increments on push", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		for i := 1; i <= 10; i++ {
 			s.Push(i)
@@ -241,7 +243,7 @@ func TestSize(t *testing.T) {
 	})
 
 	t.Run("decrements on pop", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		for i := 1; i <= 10; i++ {
 			s.Push(i)
 		}
@@ -255,7 +257,7 @@ func TestSize(t *testing.T) {
 	})
 
 	t.Run("size unchanged by peek", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		s.Push(1)
 		s.Push(2)
 
@@ -272,7 +274,7 @@ func TestSize(t *testing.T) {
 
 func TestStackOperations(t *testing.T) {
 	t.Run("push and pop sequence", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		// Push 1, 2, 3
 		s.Push(1)
@@ -302,7 +304,7 @@ func TestStackOperations(t *testing.T) {
 	})
 
 	t.Run("interleaved push, pop, and peek", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 
 		s.Push("a")
 		val, _ := s.Peek()
@@ -339,7 +341,7 @@ func TestStackOperations(t *testing.T) {
 	})
 
 	t.Run("handles large number of elements", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		n := 1000
 
 		// Push n elements
@@ -370,7 +372,7 @@ func TestStackOperations(t *testing.T) {
 
 func TestStackWithDifferentTypes(t *testing.T) {
 	t.Run("works with float64", func(t *testing.T) {
-		s := NewStack[float64]()
+		s := containers.NewStack[float64]()
 		s.Push(3.14)
 		s.Push(2.71)
 
@@ -386,7 +388,7 @@ func TestStackWithDifferentTypes(t *testing.T) {
 	})
 
 	t.Run("works with runes", func(t *testing.T) {
-		s := NewStack[rune]()
+		s := containers.NewStack[rune]()
 		s.Push('a')
 		s.Push('b')
 		s.Push('c')
@@ -400,7 +402,7 @@ func TestStackWithDifferentTypes(t *testing.T) {
 
 func TestStackEdgeCases(t *testing.T) {
 	t.Run("multiple pops on empty stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		for i := 0; i < 5; i++ {
 			_, err := s.Pop()
@@ -411,7 +413,7 @@ func TestStackEdgeCases(t *testing.T) {
 	})
 
 	t.Run("multiple peeks on empty stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		for i := 0; i < 5; i++ {
 			_, err := s.Peek()
@@ -422,7 +424,7 @@ func TestStackEdgeCases(t *testing.T) {
 	})
 
 	t.Run("push after emptying stack", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 
 		// Push and pop
 		s.Push(1)
@@ -441,7 +443,7 @@ func TestStackEdgeCases(t *testing.T) {
 	})
 
 	t.Run("handles zero values", func(t *testing.T) {
-		s := NewStack[int]()
+		s := containers.NewStack[int]()
 		s.Push(0)
 		s.Push(0)
 		s.Push(0)
@@ -460,7 +462,7 @@ func TestStackEdgeCases(t *testing.T) {
 	})
 
 	t.Run("handles empty strings", func(t *testing.T) {
-		s := NewStack[string]()
+		s := containers.NewStack[string]()
 		s.Push("")
 		s.Push("non-empty")
 		s.Push("")

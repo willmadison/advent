@@ -1,7 +1,6 @@
 package advent2025_test
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 
@@ -15,7 +14,6 @@ func TestFindInvalidIdentifiers(t *testing.T) {
 	expectedSum := int64(1227775554)
 
 	identifiers, err := advent2025.FindInvalidIdentifiers(given, advent2025.ExactlyTwice)
-	fmt.Println("identifiers:", identifiers)
 
 	assert.Nil(t, err)
 
@@ -32,7 +30,6 @@ func TestFindInvalidIdentifiers(t *testing.T) {
 	expectedSum = int64(4174379265)
 
 	identifiers, err = advent2025.FindInvalidIdentifiers(given, advent2025.AtLeastTwice)
-	fmt.Println("identifiers:", identifiers)
 
 	assert.Nil(t, err)
 

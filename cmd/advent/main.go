@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.FindMaxiumAreaRectangleWithConstraints(response)
+	answer, _ := advent2025.MinimizeButtonPressesForProperMachineJoltage(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

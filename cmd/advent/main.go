@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.CountAllDevicePathsPassingThrough(response, advent2025.Dac, advent2025.Fft)
+	answer, _ := advent2025.CountGiftRegionFits(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

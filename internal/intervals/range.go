@@ -69,6 +69,14 @@ type Range struct {
 	Start, End int64
 }
 
+func (r Range) Overlaps(other Range) bool {
+	return r.Start <= other.End && other.Start <= r.End
+}
+
+func (r Range) ContainsRange(other Range) bool {
+	return r.Start <= other.Start && r.End >= other.End
+}
+
 func (r Range) Iter() <-chan int64 {
 	ch := make(chan int64)
 	go func() {

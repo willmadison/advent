@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/willmadison/advent/advent2025"
+	"github.com/willmadison/advent/advent2022"
 	"github.com/willmadison/advent/internal/problems"
 )
 
@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2025.CountGiftRegionFits(response)
+	answer, _ := advent2022.FindOverlappingCleanupRangePairs(response)
 
 	color.Green("=================")
 	color.Green("%v", answer)

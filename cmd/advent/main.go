@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2022.FindTerminalTopCrates(response, advent2022.MoveStrategyMultipleAtOnce)
+	answer, _ := advent2022.FindFirstMarkerIndex(response, 14)
 
 	color.Green("=================")
 	color.Green("%v", answer)

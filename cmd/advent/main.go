@@ -29,7 +29,7 @@ func main() {
 
 	start := time.Now()
 
-	answer, _ := advent2022.FindFirstMarkerIndex(response, 14)
+	answer, _ := advent2022.FindSmallestDirectoryToDelete(response, 30_000_000)
 
 	color.Green("=================")
 	color.Green("%v", answer)
